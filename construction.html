@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Construction Services — Mint Landscape</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #0a140c;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* ─────────────────────────────
+       HERO — full viewport, image bg
+    ───────────────────────────── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* background video */
+    .hero__bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .hero__bg video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* gradient — heavier in bottom half for text legibility */
+    .hero__bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.08) 0%,
+        rgba(0,0,0,0.22) 40%,
+        rgba(0,0,0,0.68) 100%
+      );
+    }
+
+    /* thin bottom rule */
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: rgba(255,255,255,0.18);
+      z-index: 10;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 52px;
+      opacity: 0;
+      transform: translateY(-12px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    .nav.show { opacity: 1; transform: translateY(0); }
+
+    .nav__logo {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 7px;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .nav__links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav__links a {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.72);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .nav__links a:hover,
+    .nav__links a.active { color: #fff; }
+
+    /* ── HERO CONTENT ── */
+    .hero__content {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 52px 52px;
+    }
+
+    .hero__heading {
+      font-size: clamp(26px, 3.6vw, 58px);
+      font-weight: 500;
+      color: #ffffff;
+      line-height: 1.28;
+      max-width: 860px;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    .hero__heading.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* bottom row */
+    .hero__bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 44px;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s ease 0.18s, transform 0.7s ease 0.18s;
+    }
+
+    .hero__bottom.show { opacity: 1; transform: translateY(0); }
+
+    /* scroll-down circle */
+    .scroll-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.50);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .scroll-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.10);
+      transform: scale(0);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .scroll-btn:hover::before { transform: scale(1); }
+    .scroll-btn:hover { border-color: rgba(255,255,255,0.90); transform: translateY(3px); }
+
+    .scroll-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 1.8;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* get-a-quote pill — white bg, green fill on hover */
+    .quote-btn {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #0a140c;
+      text-decoration: none;
+      background: #ffffff;
+      border: 1.5px solid #ffffff;
+      border-radius: 100px;
+      padding: 15px 42px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      z-index: 0;
+      transition: color 0.35s ease, transform 0.18s ease;
+    }
+
+    .quote-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 100px;
+      background: #2a5c35;
+      transform: translateX(-101%);
+      transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1;
+    }
+
+    .quote-btn:hover::after { transform: translateX(0); }
+    .quote-btn:hover { color: #ffffff; transform: translateY(-2px); }
+    .quote-btn:active { transform: translateY(0); }
+    .quote-btn span { position: relative; z-index: 2; }
+
+    /* ─────────────────────────────
+       SCROLL CONTENT
+    ───────────────────────────── */
+    .page-content {
+      background: #f4f3f0;
+      overflow: hidden;
+    }
+
+    /* ── INTRO: image left, text right ── */
+    .cst-intro {
+      display: flex;
+      align-items: stretch;
+      min-height: 100vh;
+    }
+
+    /* image panel — left 55% */
+    .cst-intro__img {
+      flex: 0 0 55%;
+      position: relative;
+      overflow: hidden;
+      clip-path: inset(5% 5% 5% 5% round 16px);
+      transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .cst-intro__img.reveal {
+      clip-path: inset(0% 0% 0% 0% round 0px);
+    }
+
+    .cst-intro__img-inner {
+      position: absolute;
+      inset: 0;
+      background-image: url('images/con_house1.jpg');
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* subtle parallax-like scale on scroll enter */
+    .cst-intro__img.reveal .cst-intro__img-inner {
+      transform: scale(1);
+    }
+
+    /* text panel — right */
+    .cst-intro__text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 72px 80px 80px;
+      background: #f4f3f0;
+    }
+
+    /* eyebrow */
+    .cst-intro__eyebrow {
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #4aaa33;
+      margin-bottom: 28px;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .cst-intro__eyebrow.show { opacity: 1; transform: translateY(0); }
+
+    /* main heading */
+    .cst-intro__heading {
+      font-size: clamp(26px, 2.6vw, 42px);
+      font-weight: 700;
+      color: #0f1f12;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      margin-bottom: 40px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+
+    .cst-intro__heading.show { opacity: 1; transform: translateY(0); }
+
+    /* body paragraphs */
+    .cst-intro__body {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .cst-intro__body.show { opacity: 1; transform: translateY(0); }
+
+    .cst-intro__body p {
+      font-size: clamp(13px, 1.05vw, 15.5px);
+      font-weight: 300;
+      color: #3a3a3a;
+      line-height: 1.82;
+      max-width: 400px;
+    }
+
+    .cst-intro__body p + p { margin-top: 22px; }
+
+    /* accent rule between heading and body */
+    .cst-intro__rule {
+      width: 0;
+      height: 1.5px;
+      background: #4aaa33;
+      margin-bottom: 36px;
+      transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .cst-intro__rule.show { width: 48px; }
+
+    /* ─────────────────────────────
+       SERVICES GRID
+    ───────────────────────────── */
+    .svc-section {
+      padding: 130px 72px 150px;
+      background: #f4f3f0;
+    }
+
+    .svc-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 60px;
+      margin-bottom: 96px;
+    }
+
+    .svc-title {
+      font-size: clamp(42px, 5.5vw, 82px);
+      font-weight: 700;
+      color: #0f1f12;
+      line-height: 1.02;
+      letter-spacing: -1.5px;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.85s ease, transform 0.85s ease;
+    }
+    .svc-title.show { opacity: 1; transform: translateY(0); }
+
+    .svc-intro-text {
+      max-width: 400px;
+      padding-top: 18px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.85s ease 0.18s, transform 0.85s ease 0.18s;
+    }
+    .svc-intro-text.show { opacity: 1; transform: translateY(0); }
+
+    .svc-intro-text p {
+      font-size: clamp(13px, 1.0vw, 15px);
+      font-weight: 300;
+      color: #3a3a3a;
+      line-height: 1.84;
+    }
+
+    .svc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      perspective: 1200px;
+      overflow: visible;
+    }
+
+    .svc-card {
+      padding: 48px 44px 52px 44px;
+      border-top: 1px solid rgba(15,31,18,0.14);
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.65s ease, transform 0.65s ease,
+                  box-shadow 0.35s ease, background 0.25s ease;
+      cursor: default;
+      will-change: transform;
+      position: relative;
+    }
+    .svc-card.show { opacity: 1; transform: translateY(0); }
+
+    /* 3D lift on hover */
+    .svc-card:hover {
+      box-shadow: 0 28px 64px -12px rgba(15,31,18,0.22),
+                  0 8px 24px -4px rgba(15,31,18,0.12);
+      z-index: 2;
+      background: #fff;
+      border-radius: 6px;
+    }
+
+    .svc-card:not(:nth-child(3n)) {
+      border-right: 1px solid rgba(15,31,18,0.14);
+    }
+
+    .svc-card__icon {
+      width: 34px;
+      height: 34px;
+      margin-bottom: 18px;
+    }
+
+    .svc-card__icon svg {
+      width: 34px;
+      height: 34px;
+      stroke: #0f1f12;
+      fill: none;
+      stroke-width: 1.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .svc-card__name {
+      font-size: clamp(14px, 1.05vw, 16.5px);
+      font-weight: 600;
+      color: #0f1f12;
+      letter-spacing: -0.2px;
+      margin-bottom: 14px;
+    }
+
+    .svc-card__line {
+      width: 30px;
+      height: 1.5px;
+      background: #4aaa33;
+      margin-bottom: 16px;
+    }
+
+    .svc-card__desc {
+      font-size: clamp(12px, 0.88vw, 13.5px);
+      font-weight: 300;
+      color: #555;
+      line-height: 1.80;
+    }
+
+    .svc-cta {
+      display: flex;
+      justify-content: center;
+      padding-top: 100px;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .svc-cta.show { opacity: 1; transform: translateY(0); }
+
+    .svc-quote-btn {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+      background: #0f1f12;
+      border: 1.5px solid #0f1f12;
+      border-radius: 100px;
+      padding: 18px 60px;
+      position: relative;
+      overflow: hidden;
+      z-index: 0;
+      transition: color 0.35s ease, transform 0.18s ease;
+      cursor: pointer;
+    }
+    .svc-quote-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 100px;
+      background: #2a5c35;
+      transform: translateX(-101%);
+      transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1;
+    }
+    .svc-quote-btn:hover::after { transform: translateX(0); }
+    .svc-quote-btn:hover { color: #fff; transform: translateY(-2px); }
+    .svc-quote-btn:active { transform: translateY(0); }
+    .svc-quote-btn span { position: relative; z-index: 2; }
+
+    /* ─────────────────────────────
+       OUR BELIEF
+    ───────────────────────────── */
+    .belief-section {
+      background: #eceae6;
+      padding: 120px 72px 130px;
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+    }
+
+    .belief-label {
+      flex: 0 0 480px;
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .belief-label.show { opacity: 1; transform: translateY(0); }
+
+    .belief-label h2 {
+      font-size: clamp(38px, 5vw, 70px);
+      font-weight: 700;
+      color: #0f1f12;
+      line-height: 1.04;
+      letter-spacing: -1.5px;
+    }
+
+    .belief-body {
+      flex: 1;
+      padding-top: 10px;
+      padding-left: 80px;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.85s ease 0.2s, transform 0.85s ease 0.2s;
+    }
+    .belief-body.show { opacity: 1; transform: translateY(0); }
+
+    .belief-body p {
+      font-size: clamp(15px, 1.3vw, 20px);
+      font-weight: 300;
+      color: #1a2e1d;
+      line-height: 1.80;
+      max-width: 600px;
+    }
+
+    /* ─────────────────────────────
+       SERVICE AREAS
+    ───────────────────────────── */
+    .areas-section {
+      background: #0f1f12;
+      padding: 120px 72px 130px;
+      display: flex;
+      align-items: center;
+      gap: 80px;
+      overflow: hidden;
+    }
+
+    .areas-left {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .areas-eyebrow {
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #4aaa33;
+      margin-bottom: 24px;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .areas-eyebrow.show { opacity: 1; transform: translateY(0); }
+
+    .areas-title {
+      font-size: clamp(38px, 5vw, 72px);
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.04;
+      letter-spacing: -1.5px;
+      margin-bottom: 60px;
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s;
+    }
+    .areas-title.show { opacity: 1; transform: translateY(0); }
+
+    .areas-grid {
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+      column-gap: 80px;
+      row-gap: 0;
+      width: fit-content;
+    }
+
+    .areas-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      opacity: 0;
+      transform: translateX(-18px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .areas-item.show { opacity: 1; transform: translateX(0); }
+
+    .areas-item__dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #4aaa33;
+      flex-shrink: 0;
+    }
+
+    .areas-item__name {
+      font-size: clamp(13px, 1.0vw, 15px);
+      font-weight: 400;
+      color: rgba(255,255,255,0.78);
+      white-space: nowrap;
+    }
+
+    .areas-map {
+      flex: 0 0 460px;
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 1s ease 0.3s, transform 1s cubic-bezier(0.16,1,0.3,1) 0.3s;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 24px 64px -12px rgba(0,0,0,0.45);
+    }
+    .areas-map.show { opacity: 1; transform: translateX(0); }
+
+    .areas-map iframe {
+      width: 100%;
+      height: 380px;
+      border: none;
+      display: block;
+      filter: grayscale(20%) contrast(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HERO ── -->
+  <section class="hero" id="hero">
+
+    <!-- Background image with drift -->
+    <div class="hero__bg" aria-hidden="true">
+      <video autoplay muted playsinline loop>
+        <source src="videos/con_vid.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <!-- Nav -->
+    <nav class="nav" id="siteNav">
+      <a href="home.html" class="nav__logo">Mint Landscape</a>
+      <ul class="nav__links">
+        <li><a href="maintenance.html">Maintenance</a></li>
+        <li><a href="construction.html" class="active">Construction</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- Content -->
+    <div class="hero__content">
+      <h1 class="hero__heading" id="heroHeading">
+        We craft spaces that endure.<br>
+        Skilled across every discipline of landscape construction,<br>
+        we bring vision, depth, and permanence to your property.
+      </h1>
+      <div class="hero__bottom" id="heroBottom">
+        <a href="#content" class="scroll-btn" aria-label="Scroll down">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <polyline points="19 12 12 19 5 12"/>
+          </svg>
+        </a>
+        <a href="contact.html#quote" class="quote-btn">
+          <span>Get a Quote</span>
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── SCROLL CONTENT ── -->
+  <div class="page-content" id="content">
+
+    <!-- Intro: image left, text right -->
+    <div class="cst-intro" id="cstIntro">
+
+      <div class="cst-intro__img" id="cstImg">
+        <div class="cst-intro__img-inner"></div>
+      </div>
+
+      <div class="cst-intro__text">
+        <p class="cst-intro__eyebrow" id="cstEyebrow">Landscape Construction</p>
+        <h2 class="cst-intro__heading" id="cstHeading">
+          Our Construction<br>Services.
+        </h2>
+        <div class="cst-intro__rule" id="cstRule"></div>
+        <div class="cst-intro__body" id="cstBody">
+          <p>
+            Our construction team and in-house horticulturists are driven by a
+            genuine love of design. For them, creating and building isn't just
+            a job it's where their passion finds its fullest expression.
+          </p>
+          <p>
+            We deliver a comprehensive suite of landscape construction services:
+            from full-scale renovations and new residential builds to commercial
+            developments, public spaces, and strata or multi-family projects.
+          </p>
+          <p>
+            Above all, we are a team that listens. We take the time to deeply
+            understand your outdoor vision, then apply our craft to make it
+            real on time, on budget, and beyond expectation.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── SERVICES GRID ── -->
+    <section class="svc-section" id="svcSection">
+
+      <div class="svc-header" id="svcHeader">
+        <h2 class="svc-title" id="svcTitle">Our<br>Services.</h2>
+        <div class="svc-intro-text" id="svcIntroText">
+          <p>
+            Every outdoor space tells a story. Our construction specialists bring
+            decades of hands-on experience to every project, working with
+            precision and care to shape environments that stand apart and
+            stand the test of time.
+          </p>
+        </div>
+      </div>
+
+      <div class="svc-grid" id="svcGrid">
+
+        <!-- Turf and Sod -->
+        <div class="svc-card" data-svc>
+          <div class="svc-card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <line x1="2" y1="20" x2="22" y2="20"/>
+              <path d="M9 20c0-5 0.5-8 1.5-10"/>
+              <path d="M10.5 10c0.5-2 2-3 3.5-1.5"/>
+              <path d="M10.5 10c-0.5-2-2-3-3.5-1.5"/>
+              <path d="M12 20c0-6 0.5-9 0-12"/>
+              <path d="M6 20c0-4 0.5-6 1.5-8"/>
+              <path d="M18 20c0-4-0.5-6-1.5-8"/>
+            </svg>
+          </div>
+          <p class="svc-card__name">Turf and Sod</p>
+          <div class="svc-card__line"></div>
+          <p class="svc-card__desc">A well-laid lawn sets the tone for everything around it. We prepare your ground thoroughly and lay premium turf or sod suited to your soil, sun exposure and lifestyle, delivering a result that stays lush through every season.</p>
+        </div>
+
+        <!-- Retaining Walls -->
+        <div class="svc-card" data-svc>
+          <div class="svc-card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="2" y="16" width="20" height="4" rx="0.5"/>
+              <rect x="2" y="10" width="9" height="4" rx="0.5"/>
+              <rect x="13" y="10" width="9" height="4" rx="0.5"/>
+              <rect x="2" y="4" width="6" height="4" rx="0.5"/>
+              <rect x="10" y="4" width="5" height="4" rx="0.5"/>
+              <rect x="17" y="4" width="5" height="4" rx="0.5"/>
+            </svg>
+          </div>
+          <p class="svc-card__name">Retaining Walls</p>
+          <div class="svc-card__line"></div>
+          <p class="svc-card__desc">Beyond holding ground in place, a well-built retaining wall shapes the character of your landscape. We construct walls that carry their load with confidence while adding a sense of order and permanence to your outdoor environment.</p>
+        </div>
+
+        <!-- Woodworking -->
+        <div class="svc-card" data-svc>
+          <div class="svc-card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M2 9 Q5 6 8 9 Q11 6 14 9 Q17 6 20 9 Q22 8 22 9"/>
+              <line x1="4" y1="9" x2="4" y2="20"/>
+              <line x1="12" y1="9" x2="12" y2="20"/>
+              <line x1="20" y1="9" x2="20" y2="20"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <line x1="2" y1="20" x2="22" y2="20"/>
+            </svg>
+          </div>
+          <p class="svc-card__name">Woodworking</p>
+          <div class="svc-card__line"></div>
+          <p class="svc-card__desc">From pergolas and privacy screens to decks, trellises and custom fencing, our craftsmen work with quality timber selected to perform outdoors. Every structure we build is designed to feel at home in its setting for years to come.</p>
+        </div>
+
+        <!-- Garden Beds -->
+        <div class="svc-card" data-svc>
+          <div class="svc-card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="2" y="15" width="20" height="5" rx="1"/>
+              <path d="M12 15c0-4-1-7 0-10"/>
+              <path d="M12 5c-2-1-4 0-4 2"/>
+              <path d="M12 8c2-1 4 0 4 2"/>
+              <path d="M7 15c0-3 1-5 2-6"/>
+              <path d="M17 15c0-3-1-5-2-6"/>
+            </svg>
+          </div>
+          <p class="svc-card__name">Garden Beds</p>
+          <div class="svc-card__line"></div>
+          <p class="svc-card__desc">Thoughtfully planned garden beds can transform even a modest yard into something memorable. We build and plant to suit your aesthetic, from layered perennial borders to raised kitchen gardens, using soil mixes and practices that keep things thriving long after installation.</p>
+        </div>
+
+        <!-- Natural Stone -->
+        <div class="svc-card" data-svc>
+          <div class="svc-card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <ellipse cx="12" cy="19" rx="9" ry="2.5"/>
+              <ellipse cx="12" cy="13" rx="6.5" ry="2.5"/>
+              <ellipse cx="12" cy="8" rx="4" ry="2.5"/>
+              <ellipse cx="12" cy="4" rx="2" ry="1.5"/>
+            </svg>
+          </div>
+          <p class="svc-card__name">Natural Stone</p>
+          <div class="svc-card__line"></div>
+          <p class="svc-card__desc">Few materials age as gracefully as natural stone. We source and install carefully selected stone for patios, pathways, steps and garden accents, fitting each piece with precision so the result feels as though it has always belonged there.</p>
+        </div>
+
+        <!-- Irrigation and Lighting -->
+        <div class="svc-card" data-svc>
+          <div class="svc-card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="8" r="4"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="13" x2="12" y2="15"/>
+              <line x1="4.22" y1="3.22" x2="5.64" y2="4.64"/>
+              <line x1="18.36" y1="11.36" x2="19.78" y2="12.78"/>
+              <line x1="2" y1="8" x2="4" y2="8"/>
+              <line x1="20" y1="8" x2="22" y2="8"/>
+              <path d="M9 19c0-2 1.5-3 2-4h2c0.5 1 2 2 2 4"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+            </svg>
+          </div>
+          <p class="svc-card__name">Irrigation and Lighting</p>
+          <div class="svc-card__line"></div>
+          <p class="svc-card__desc">A landscape that performs well after dark and stays hydrated without waste is a landscape that endures. We design and install irrigation and lighting systems that are efficient, reliable and genuinely enhance how your property looks and functions around the clock.</p>
+        </div>
+
+        <!-- Pathways, Patios and Driveways -->
+        <div class="svc-card" data-svc>
+          <div class="svc-card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="2" y="2" width="5" height="5" rx="0.5"/>
+              <rect x="9.5" y="2" width="5" height="5" rx="0.5"/>
+              <rect x="17" y="2" width="5" height="5" rx="0.5"/>
+              <rect x="2" y="9.5" width="5" height="5" rx="0.5"/>
+              <rect x="9.5" y="9.5" width="5" height="5" rx="0.5"/>
+              <rect x="17" y="9.5" width="5" height="5" rx="0.5"/>
+              <rect x="2" y="17" width="5" height="5" rx="0.5"/>
+              <rect x="9.5" y="17" width="5" height="5" rx="0.5"/>
+              <rect x="17" y="17" width="5" height="5" rx="0.5"/>
+            </svg>
+          </div>
+          <p class="svc-card__name">Pathways, Patios and Driveways</p>
+          <div class="svc-card__line"></div>
+          <p class="svc-card__desc">We design and build outdoor surfaces that hold up to daily use and look great doing it. Working closely with you, we select materials and layouts that suit your property, your habits and the surrounding environment for a result that feels complete.</p>
+        </div>
+
+        <!-- Site Furnishings -->
+        <div class="svc-card" data-svc>
+          <div class="svc-card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="9" width="18" height="3" rx="0.5"/>
+              <rect x="4" y="6" width="16" height="2.5" rx="0.5"/>
+              <line x1="6" y1="12" x2="6" y2="19"/>
+              <line x1="18" y1="12" x2="18" y2="19"/>
+              <line x1="4" y1="19" x2="8" y2="19"/>
+              <line x1="16" y1="19" x2="20" y2="19"/>
+            </svg>
+          </div>
+          <p class="svc-card__name">Site Furnishings</p>
+          <div class="svc-card__line"></div>
+          <p class="svc-card__desc">The right outdoor fixtures turn a yard into a place people actually want to spend time. We source and install benches, planters, tables and play elements that are built for outdoor conditions and placed to complement everything around them.</p>
+        </div>
+
+        <!-- Architectural Concrete Features -->
+        <div class="svc-card" data-svc>
+          <div class="svc-card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M2 20 h6 v-5 h6 v-5 h6 v-5 h2"/>
+              <line x1="2" y1="20" x2="2" y2="10"/>
+            </svg>
+          </div>
+          <p class="svc-card__name">Architectural Concrete Features</p>
+          <div class="svc-card__line"></div>
+          <p class="svc-card__desc">Concrete done well has a confidence that few materials can match. Our team designs and pours custom concrete elements, from sculpted pathways and statement patios to textured accent walls, tailored to the specific character of your space.</p>
+        </div>
+
+      </div>
+
+      <!-- Bottom CTA -->
+      <div class="svc-cta" id="svcCta">
+        <a href="contact.html#quote" class="svc-quote-btn"><span>Get a Quote</span></a>
+      </div>
+
+    </section>
+
+    <!-- ── SERVICE AREAS ── -->
+    <section class="areas-section" id="areasSection">
+
+      <div class="areas-left" id="areasLeft">
+        <p class="areas-eyebrow" id="areasEyebrow">Where We Work</p>
+        <h2 class="areas-title" id="areasTitle">Service<br>Areas.</h2>
+
+        <div class="areas-grid" id="areasGrid">
+
+          <div class="areas-item" data-area><span class="areas-item__dot"></span><span class="areas-item__name">Vancouver</span></div>
+          <div class="areas-item" data-area><span class="areas-item__dot"></span><span class="areas-item__name">West Vancouver</span></div>
+          <div class="areas-item" data-area><span class="areas-item__dot"></span><span class="areas-item__name">Vancouver Island</span></div>
+
+          <div class="areas-item" data-area><span class="areas-item__dot"></span><span class="areas-item__name">Metro Vancouver</span></div>
+          <div class="areas-item" data-area><span class="areas-item__dot"></span><span class="areas-item__name">Fraser Valley</span></div>
+          <div class="areas-item" data-area><span class="areas-item__dot"></span><span class="areas-item__name">Gulf Islands</span></div>
+
+          <div class="areas-item" data-area><span class="areas-item__dot"></span><span class="areas-item__name">Burnaby</span></div>
+          <div class="areas-item" data-area><span class="areas-item__dot"></span><span class="areas-item__name">North Vancouver</span></div>
+          <div class="areas-item" data-area><span class="areas-item__dot"></span><span class="areas-item__name">Discovery Islands</span></div>
+
+          <div class="areas-item" data-area><span class="areas-item__dot"></span><span class="areas-item__name">Richmond</span></div>
+
+        </div>
+      </div>
+
+      <!-- Google Maps embed -->
+      <div class="areas-map" id="areasMap">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2602.5!2d-123.1139!3d49.2827!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x548673d4a8a7f3bb%3A0x1!2s422+Richards+St%2C+Vancouver%2C+BC+V6B+2Z4!5e0!3m2!1sen!2sca!4v1"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Mint Landscape office location"
+        ></iframe>
+      </div>
+
+    </section>
+
+    <!-- ── OUR BELIEF ── -->
+    <section class="belief-section" id="beliefSection">
+
+      <div class="belief-label" id="beliefLabel">
+        <h2>Our<br>Belief.</h2>
+      </div>
+
+      <div class="belief-body" id="beliefBody">
+        <p>
+          We hold a simple conviction: that the ground beneath your feet should
+          feel as considered as everything above it. Mint Landscape was built on
+          the understanding that great outdoor spaces are not accidents. They are
+          the result of real listening, honest craft, and a deep respect for the
+          land we work with. Every project we take on carries that responsibility.
+          We do not cut corners, we do not overstate what we can deliver, and we
+          do not walk away until the work is something we are proud to put our
+          name to. That is what it means to build with Mint.
+        </p>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script>
+    // ── Hero entrance ──
+    setTimeout(function () {
+      document.getElementById('siteNav').classList.add('show');
+      setTimeout(function () { document.getElementById('heroHeading').classList.add('show'); }, 150);
+      setTimeout(function () { document.getElementById('heroBottom').classList.add('show'); }, 400);
+    }, 1000);
+
+    // ── Bidirectional scroll helper ──
+    // Elements tagged with data-reveal get .show when visible, lose it when they leave
+    function makeRevealObs(threshold, onEnter, onLeave) {
+      return new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) { onEnter(entry.target); }
+          else                      { if (onLeave) onLeave(entry.target); }
+        });
+      }, { threshold: threshold || 0.15 });
+    }
+
+    // ── Intro panel (image + text) ──
+    var introEls = {
+      img:     document.getElementById('cstImg'),
+      eyebrow: document.getElementById('cstEyebrow'),
+      heading: document.getElementById('cstHeading'),
+      rule:    document.getElementById('cstRule'),
+      body:    document.getElementById('cstBody')
+    };
+    var introTimers = [];
+
+    makeRevealObs(0.15,
+      function() {
+        introEls.img.classList.add('reveal');
+        introTimers.push(setTimeout(function(){ introEls.eyebrow.classList.add('show'); }, 400));
+        introTimers.push(setTimeout(function(){ introEls.heading.classList.add('show'); }, 650));
+        introTimers.push(setTimeout(function(){ introEls.rule.classList.add('show');    }, 900));
+        introTimers.push(setTimeout(function(){ introEls.body.classList.add('show');    }, 1050));
+      },
+      function() {
+        introTimers.forEach(clearTimeout); introTimers = [];
+        introEls.img.classList.remove('reveal');
+        introEls.eyebrow.classList.remove('show');
+        introEls.heading.classList.remove('show');
+        introEls.rule.classList.remove('show');
+        introEls.body.classList.remove('show');
+      }
+    ).observe(document.getElementById('cstIntro'));
+
+    // ── Services header ──
+    makeRevealObs(0.2,
+      function() {
+        document.getElementById('svcTitle').classList.add('show');
+        setTimeout(function(){ document.getElementById('svcIntroText').classList.add('show'); }, 180);
+      },
+      function() {
+        document.getElementById('svcTitle').classList.remove('show');
+        document.getElementById('svcIntroText').classList.remove('show');
+      }
+    ).observe(document.getElementById('svcHeader'));
+
+    // ── Service cards — stagger by column, reverse on leave ──
+    var svcCards = Array.from(document.querySelectorAll('[data-svc]'));
+    var cardTimers = [];
+    var cardObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        var col = svcCards.indexOf(entry.target) % 3;
+        if (entry.isIntersecting) {
+          var t = setTimeout(function(){ entry.target.classList.add('show'); }, col * 140);
+          cardTimers.push(t);
+        } else {
+          entry.target.classList.remove('show');
+        }
+      });
+    }, { threshold: 0.12 });
+    svcCards.forEach(function(c) { cardObs.observe(c); });
+
+    // ── CTA button ──
+    makeRevealObs(0.4,
+      function(el){ el.classList.add('show'); },
+      function(el){ el.classList.remove('show'); }
+    ).observe(document.getElementById('svcCta'));
+
+    // ── Our Belief ──
+    makeRevealObs(0.2,
+      function() {
+        document.getElementById('beliefLabel').classList.add('show');
+        setTimeout(function(){ document.getElementById('beliefBody').classList.add('show'); }, 200);
+      },
+      function() {
+        document.getElementById('beliefLabel').classList.remove('show');
+        document.getElementById('beliefBody').classList.remove('show');
+      }
+    ).observe(document.getElementById('beliefSection'));
+
+    // ── Service Areas ──
+    makeRevealObs(0.2,
+      function() {
+        document.getElementById('areasEyebrow').classList.add('show');
+        setTimeout(function(){ document.getElementById('areasTitle').classList.add('show'); }, 150);
+        document.getElementById('areasMap').classList.add('show');
+      },
+      function() {
+        document.getElementById('areasEyebrow').classList.remove('show');
+        document.getElementById('areasTitle').classList.remove('show');
+        document.getElementById('areasMap').classList.remove('show');
+      }
+    ).observe(document.getElementById('areasSection'));
+
+    var areaItems = Array.from(document.querySelectorAll('[data-area]'));
+    var areaObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        var idx = areaItems.indexOf(entry.target);
+        if (entry.isIntersecting) {
+          setTimeout(function(){ entry.target.classList.add('show'); }, idx * 60);
+        } else {
+          entry.target.classList.remove('show');
+        }
+      });
+    }, { threshold: 0.2 });
+    areaItems.forEach(function(el) { areaObs.observe(el); });
+
+    // ── 3D tilt on service cards ──
+    svcCards.forEach(function(card) {
+      card.addEventListener('mousemove', function(e) {
+        var rect = card.getBoundingClientRect();
+        var cx = rect.left + rect.width  / 2;
+        var cy = rect.top  + rect.height / 2;
+        var dx = (e.clientX - cx) / (rect.width  / 2);  // -1 to 1
+        var dy = (e.clientY - cy) / (rect.height / 2);
+        var tiltX = dy * -6;   // degrees
+        var tiltY = dx *  6;
+        card.style.transform = 'translateY(-6px) rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg) scale(1.01)';
+        card.style.transition = 'box-shadow 0.2s ease, background 0.2s ease';
+      });
+      card.addEventListener('mouseleave', function() {
+        card.style.transform = '';
+        card.style.transition = 'opacity 0.65s ease, transform 0.55s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s ease';
+      });
+    });
+  </script>
+
+</body>
+</html>

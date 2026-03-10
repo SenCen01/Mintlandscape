@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Mint Landscape</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: #f4f3f0; font-family: 'Inter', sans-serif; }
+
+    /* ─────────────────────────────
+       FIXED NAV
+    ───────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: #0a140c;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 52px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .nav__logo {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 7px;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .nav__links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav__links a {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.72);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .nav__links a:hover,
+    .nav__links a.active { color: #fff; }
+
+    /* ─────────────────────────────
+       CONTACT INFO SECTION
+    ───────────────────────────── */
+    .contact-info {
+      padding: 150px 72px 110px;
+      background: #f4f3f0;
+    }
+
+    .contact-title {
+      font-size: clamp(56px, 9vw, 130px);
+      font-weight: 800;
+      color: #0f1f12;
+      line-height: 1;
+      letter-spacing: -4px;
+      margin-bottom: 88px;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.85s ease, transform 0.85s ease;
+    }
+    .contact-title.show { opacity: 1; transform: translateY(0); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 0 80px;
+      align-items: start;
+    }
+
+    .contact-col__head {
+      font-size: 14px;
+      font-weight: 500;
+      color: #0f1f12;
+      letter-spacing: 0.2px;
+      margin-bottom: 18px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .contact-col__head.show { opacity: 1; transform: translateY(0); }
+
+    .contact-col__rule {
+      height: 1px;
+      background: rgba(15,31,18,0.18);
+      margin-bottom: 36px;
+      width: 0;
+      transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .contact-col__rule.show { width: 100%; }
+
+    /* Location block */
+    .contact-loc {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.65s ease 0.15s, transform 0.65s ease 0.15s;
+    }
+    .contact-loc.show { opacity: 1; transform: translateY(0); }
+
+    .contact-loc__name {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #0f1f12;
+      letter-spacing: 0.3px;
+      margin-bottom: 8px;
+    }
+
+    .contact-loc__addr {
+      font-size: 13px;
+      font-weight: 300;
+      color: #555;
+      line-height: 1.78;
+    }
+
+    /* Enquiries grid */
+    .enquiries-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0 48px;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.65s ease 0.15s, transform 0.65s ease 0.15s;
+    }
+    .enquiries-grid.show { opacity: 1; transform: translateY(0); }
+
+    .enq-item__head {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #4aaa33;
+      letter-spacing: 0.2px;
+      margin-bottom: 12px;
+    }
+
+    .enq-item__detail {
+      font-size: 13px;
+      font-weight: 300;
+      color: #555;
+      line-height: 1.78;
+    }
+
+    /* ─────────────────────────────
+       GOOGLE MAP
+    ───────────────────────────── */
+    .map-section {
+      width: 100%;
+      height: 540px;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .map-section.show { opacity: 1; }
+
+    .map-section iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      filter: grayscale(15%) contrast(1.05);
+    }
+
+    /* ─────────────────────────────
+       GET A QUOTE SECTION
+    ───────────────────────────── */
+    .quote-section {
+      background: #0f1f12;
+      padding: 0;
+      scroll-margin-top: 70px;
+    }
+
+    .quote-inner {
+      display: flex;
+      align-items: stretch;
+      min-height: 100vh;
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.85s ease, transform 0.85s ease;
+    }
+    .quote-inner.show { opacity: 1; transform: translateY(0); }
+
+    /* Left panel — text */
+    .quote-left {
+      flex: 0 0 42%;
+      padding: 110px 64px 110px 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid rgba(255,255,255,0.07);
+    }
+
+    /* Right panel — form */
+    .quote-right {
+      flex: 1;
+      padding: 80px 72px 80px 64px;
+      display: flex;
+      align-items: center;
+    }
+
+    .quote-eyebrow {
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #4aaa33;
+      margin-bottom: 28px;
+    }
+
+    .quote-heading {
+      font-size: clamp(46px, 4.5vw, 86px);
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1;
+      letter-spacing: -3px;
+      margin-bottom: 44px;
+    }
+
+    .quote-rule {
+      width: 48px;
+      height: 1.5px;
+      background: #4aaa33;
+      margin-bottom: 36px;
+    }
+
+    .quote-sub {
+      font-size: clamp(13px, 1vw, 16px);
+      font-weight: 300;
+      color: rgba(255,255,255,0.50);
+      line-height: 1.85;
+    }
+
+    /* Form wrapper — transparent, no card */
+    .quote-form-wrap {
+      width: 100%;
+      position: relative;
+    }
+
+    .quote-form-wrap iframe {
+      display: block;
+      width: 100%;
+      min-height: 580px;
+      border: none;
+      background: transparent;
+    }
+
+    /* Cover the OpenForms branding badge in the bottom-right of the iframe */
+    .quote-form-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 160px;
+      height: 40px;
+      background: #0f1f12;
+      pointer-events: none;
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav class="nav">
+    <a href="home.html" class="nav__logo">Mint Landscape</a>
+    <ul class="nav__links">
+      <li><a href="maintenance.html">Maintenance</a></li>
+      <li><a href="construction.html">Construction</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── CONTACT INFO ── -->
+  <section class="contact-info" id="contactInfo">
+
+    <h1 class="contact-title" id="contactTitle">Contact.</h1>
+
+    <div class="contact-grid">
+
+      <!-- Locations -->
+      <div class="contact-col">
+        <h3 class="contact-col__head" id="locHead">Locations</h3>
+        <div class="contact-col__rule" id="locRule"></div>
+        <div class="contact-loc" id="contactLoc">
+          <p class="contact-loc__name">Vancouver</p>
+          <p class="contact-loc__addr">170 – 422 Richards St<br>Vancouver, BC V6B 2Z4</p>
+        </div>
+      </div>
+
+      <!-- Enquiries -->
+      <div class="contact-col">
+        <h3 class="contact-col__head" id="enqHead">Enquiries</h3>
+        <div class="contact-col__rule" id="enqRule"></div>
+        <div class="enquiries-grid" id="enqGrid">
+
+          <div class="enq-item">
+            <p class="enq-item__head">Maintenance &amp; General</p>
+            <p class="enq-item__detail">TBA</p>
+            <p class="enq-item__detail">TBA</p>
+          </div>
+
+          <div class="enq-item">
+            <p class="enq-item__head">Construction Projects</p>
+            <p class="enq-item__detail">TBA</p>
+            <p class="enq-item__detail">TBA</p>
+          </div>
+
+          <div class="enq-item">
+            <p class="enq-item__head">General Accounting</p>
+            <p class="enq-item__detail">TBA</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── MAP ── -->
+  <div class="map-section" id="mapSection">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2602.5!2d-123.1195!3d49.2813!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5486717f41ba2fb9%3A0x36dfc0a2b5d9e24!2s422%20Richards%20St%20%23170%2C%20Vancouver%2C%20BC%20V6B%202Z4!5e0!3m2!1sen!2sca!4v1710000000000!5m2!1sen!2sca"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      title="Mint Landscape office location"
+    ></iframe>
+  </div>
+
+  <!-- ── GET A QUOTE ── -->
+  <section class="quote-section" id="quote">
+    <div class="quote-inner" id="quoteInner">
+
+      <!-- Left: heading + text -->
+      <div class="quote-left">
+        <p class="quote-eyebrow">Work With Us</p>
+        <h2 class="quote-heading">Get a Quote.</h2>
+        <div class="quote-rule"></div>
+        <p class="quote-sub">
+          Ready to bring your outdoor vision to life?<br>
+          Fill out the form and a member of our team
+          will be in touch to discuss your project.
+        </p>
+      </div>
+
+      <!-- Right: embedded form -->
+      <div class="quote-right">
+        <div class="quote-form-wrap">
+          <iframe style="border:none;width:100%;background:transparent;" id="contact-form-yg5nct" src="https://forms.mintclean.ca/forms/contact-form-yg5nct?hide_branding=true&transparent=true"></iframe>
+          <script type="text/javascript" onload="initEmbed('contact-form-yg5nct', { autoResize: true })" src="https://forms.mintclean.ca/widgets/iframe.min.js"></script>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    /* ─────────────────────────────────────────────
+       SCROLL TO QUOTE if arriving via #quote link
+    ───────────────────────────────────────────── */
+    window.addEventListener('load', function () {
+      if (window.location.hash === '#quote') {
+        setTimeout(function () {
+          document.getElementById('quote').scrollIntoView({ behavior: 'smooth' });
+        }, 200);
+      }
+    });
+
+    /* ─────────────────────────────────────────────
+       SCROLL ANIMATIONS
+    ───────────────────────────────────────────── */
+    function makeRevealObs(threshold, onEnter, onLeave) {
+      return new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) { onEnter(entry.target); }
+          else { if (onLeave) onLeave(entry.target); }
+        });
+      }, { threshold: threshold || 0.15 });
+    }
+
+    // Contact info animates in on page load (it's at the top)
+    setTimeout(function () {
+      document.getElementById('contactTitle').classList.add('show');
+      setTimeout(function () {
+        document.getElementById('locHead').classList.add('show');
+        document.getElementById('enqHead').classList.add('show');
+      }, 280);
+      setTimeout(function () {
+        document.getElementById('locRule').classList.add('show');
+        document.getElementById('enqRule').classList.add('show');
+      }, 480);
+      setTimeout(function () {
+        document.getElementById('contactLoc').classList.add('show');
+        document.getElementById('enqGrid').classList.add('show');
+      }, 680);
+    }, 300);
+
+    // Map fades in on scroll
+    makeRevealObs(0.2,
+      function (el) { el.classList.add('show'); },
+      function (el) { el.classList.remove('show'); }
+    ).observe(document.getElementById('mapSection'));
+
+    // Quote section
+    makeRevealObs(0.2,
+      function () { document.getElementById('quoteInner').classList.add('show'); },
+      function () { document.getElementById('quoteInner').classList.remove('show'); }
+    ).observe(document.getElementById('quote'));
+  </script>
+
+</body>
+</html>

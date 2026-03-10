@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maintenance Services — Mint Landscape</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #0a140c;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* ─────────────────────────────
+       HERO — full viewport
+    ───────────────────────────── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .hero__video {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero__video video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero__video::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.12) 0%,
+        rgba(0,0,0,0.20) 40%,
+        rgba(0,0,0,0.62) 100%
+      );
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: rgba(255,255,255,0.20);
+      z-index: 10;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 52px;
+      opacity: 0;
+      transform: translateY(-12px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    .nav.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .nav__logo {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 7px;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .nav__links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav__links a {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.72);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .nav__links a:hover,
+    .nav__links a.active { color: #fff; }
+
+    /* ── HERO CONTENT ── */
+    .hero__content {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 52px 52px;
+    }
+
+    .hero__heading {
+      font-size: clamp(28px, 3.8vw, 62px);
+      font-weight: 500;
+      color: #ffffff;
+      line-height: 1.25;
+      max-width: 820px;
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .hero__heading.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero__bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 44px;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s ease 0.18s, transform 0.7s ease 0.18s;
+    }
+
+    .hero__bottom.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* scroll-down circle button */
+    .scroll-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.50);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .scroll-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.10);
+      transform: scale(0);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .scroll-btn:hover::before { transform: scale(1); }
+    .scroll-btn:hover { border-color: rgba(255,255,255,0.90); transform: translateY(3px); }
+
+    .scroll-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 1.8;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* get-a-quote pill button — green fill sweeps in from left */
+    .quote-btn {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #0a140c;
+      text-decoration: none;
+      background: #ffffff;
+      border: 1.5px solid #ffffff;
+      border-radius: 100px;
+      padding: 15px 42px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      z-index: 0;
+      transition: color 0.35s ease, transform 0.18s ease;
+    }
+
+    .quote-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 100px;
+      background: #2a5c35;
+      transform: translateX(-101%);
+      transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1;
+    }
+
+    .quote-btn:hover::after { transform: translateX(0); }
+    .quote-btn:hover { color: #ffffff; transform: translateY(-2px); }
+    .quote-btn:active { transform: translateY(0); }
+
+    .quote-btn span {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ─────────────────────────────
+       SCROLL CONTENT
+    ───────────────────────────── */
+    .page-content {
+      background: #f4f3f0;
+      overflow: hidden;
+    }
+
+    /* ── INTRO SECTION: video left, text right ── */
+    .intro-section {
+      display: flex;
+      align-items: center;
+      min-height: 100vh;
+      padding: 0 52px 0 0;
+      gap: 0;
+    }
+
+    /* video block — left */
+    .intro-section__video-wrap {
+      flex: 0 0 55%;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+      clip-path: inset(6% 6% 6% 6% round 18px);
+      transition: clip-path 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .intro-section__video-wrap.reveal {
+      clip-path: inset(0% 0% 0% 0% round 0px);
+    }
+
+    .intro-section__video-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* text block — right */
+    .intro-section__text {
+      flex: 1;
+      padding: 0 0 0 72px;
+    }
+
+    .intro-section__heading {
+      font-size: clamp(24px, 2.4vw, 40px);
+      font-weight: 500;
+      color: #0f1f12;
+      line-height: 1.25;
+      margin-bottom: 36px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+
+    .intro-section__heading.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .intro-section__body {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .intro-section__body.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .intro-section__body p {
+      font-size: clamp(13px, 1.1vw, 16px);
+      font-weight: 300;
+      color: #3a3a3a;
+      line-height: 1.75;
+      max-width: 420px;
+    }
+
+    .intro-section__body p + p {
+      margin-top: 24px;
+    }
+
+    /* ─────────────────────────────
+       WHO WE SERVE
+    ───────────────────────────── */
+    .wws {
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* section label — fades in centered */
+    .wws__label {
+      text-align: center;
+      padding: 100px 52px 72px;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.85s ease, transform 0.85s ease;
+    }
+
+    .wws__label.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .wws__label h2 {
+      font-size: clamp(36px, 5vw, 78px);
+      font-weight: 700;
+      color: #0f1f12;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    /* three-card grid */
+    .wws__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      height: 90vh;
+      gap: 0;
+    }
+
+    /* individual card */
+    .wws__card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    /* image */
+    .wws__card-img {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* pop-out on hover: scale up the image */
+    .wws__card:hover .wws__card-img {
+      transform: scale(1.06);
+    }
+
+    /* dark gradient overlay on each card */
+    .wws__card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.78) 0%,
+        rgba(0,0,0,0.18) 55%,
+        rgba(0,0,0,0.04) 100%
+      );
+      transition: background 0.45s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* on hover, deepen the overlay slightly */
+    .wws__card:hover::after {
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.88) 0%,
+        rgba(0,0,0,0.30) 55%,
+        rgba(0,0,0,0.08) 100%
+      );
+    }
+
+    /* vertical divider lines between cards */
+    .wws__card:not(:last-child) {
+      border-right: 1px solid rgba(255,255,255,0.15);
+    }
+
+    /* text content — sits at the bottom of each card */
+    .wws__card-text {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      z-index: 2;
+      padding: 0 40px 44px;
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .wws__card-text.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .wws__card-heading {
+      font-size: clamp(18px, 1.6vw, 26px);
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      letter-spacing: -0.2px;
+    }
+
+    .wws__card-body {
+      font-size: clamp(12px, 0.9vw, 14px);
+      font-weight: 300;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.7;
+      max-width: 320px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    /* body text fades in on card hover */
+    .wws__card:hover .wws__card-body {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* card lift shadow on hover */
+    .wws__card:hover {
+      z-index: 2;
+    }
+
+    /* ─────────────────────────────
+       SERVICES SECTION
+    ───────────────────────────── */
+    .svc {
+      background: #0e1a10;
+      padding: 120px 52px 140px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* subtle radial glow behind the heading */
+    .svc::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 500px;
+      background: radial-gradient(ellipse at center, rgba(90,180,80,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .svc__heading {
+      text-align: center;
+      font-size: clamp(36px, 5.5vw, 88px);
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -2px;
+      line-height: 1;
+      margin-bottom: 90px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    .svc__heading.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* two-column grid */
+    .svc__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* vertical centre divider */
+    .svc__grid::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 50%;
+      width: 1px;
+      background: rgba(255,255,255,0.10);
+    }
+
+    .svc__col {
+      padding: 0 20px;
+    }
+
+    /* category label */
+    .svc__col-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #6ec25a;
+      margin-bottom: 28px;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .svc__col-label.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* service list */
+    .svc__list {
+      list-style: none;
+      margin-bottom: 52px;
+    }
+
+    .svc__list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      font-size: clamp(14px, 1.1vw, 17px);
+      font-weight: 300;
+      color: rgba(255,255,255,0.80);
+      cursor: default;
+      opacity: 0;
+      transform: translateX(-18px);
+      transition: opacity 0.5s ease, transform 0.5s ease, color 0.25s ease, padding-left 0.25s ease;
+    }
+
+    /* stagger each list item via inline style delay set in JS */
+    .svc__list li.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .svc__list li:hover {
+      color: #ffffff;
+      padding-left: 8px;
+    }
+
+    /* bullet dot */
+    .svc__list li::before {
+      content: '';
+      flex-shrink: 0;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #6ec25a;
+      margin-top: 9px;
+      transition: transform 0.25s ease;
+    }
+
+    .svc__list li:hover::before {
+      transform: scale(1.6);
+    }
+
+    /* read-more link button */
+    .svc__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.20);
+      padding-bottom: 6px;
+      opacity: 0;
+      transition: color 0.28s ease, border-color 0.28s ease, gap 0.28s ease, opacity 0.6s ease;
+    }
+
+    .svc__link.show { opacity: 1; }
+
+    .svc__link:hover {
+      color: #6ec25a;
+      border-color: #6ec25a;
+      gap: 16px;
+    }
+
+    .svc__link svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+
+    /* ── CENTRE QUOTE BUTTON ── */
+    .svc__cta-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 90px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .svc__cta-wrap.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .svc__cta {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #0e1a10;
+      text-decoration: none;
+      background: #6ec25a;
+      border: none;
+      border-radius: 100px;
+      padding: 20px 56px;
+      cursor: pointer;
+      overflow: hidden;
+      transition: color 0.38s ease, transform 0.2s ease, box-shadow 0.38s ease;
+      box-shadow: 0 0 0 0 rgba(110,194,90,0.4);
+    }
+
+    /* ripple sweep */
+    .svc__cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 100px;
+      background: #ffffff;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 0;
+    }
+
+    .svc__cta:hover::before { transform: scaleX(1); }
+    .svc__cta:hover {
+      color: #0e1a10;
+      transform: translateY(-4px);
+      box-shadow: 0 18px 48px rgba(110,194,90,0.35);
+    }
+    .svc__cta:active { transform: translateY(-1px); }
+
+    .svc__cta span, .svc__cta svg {
+      position: relative;
+      z-index: 1;
+    }
+
+    .svc__cta svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      transition: transform 0.3s ease;
+    }
+
+    .svc__cta:hover svg { transform: translateX(4px); }
+
+    /* ─────────────────────────────
+       LOCATION SECTION
+    ───────────────────────────── */
+    .loc {
+      background: #f4f3f0;
+      padding: 120px 52px 0;
+      overflow: hidden;
+    }
+
+    .loc__top {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 60px;
+      gap: 40px;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.85s ease, transform 0.85s ease;
+    }
+
+    .loc__top.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .loc__heading {
+      font-size: clamp(36px, 5vw, 78px);
+      font-weight: 800;
+      color: #0f1f12;
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+
+    .loc__address {
+      text-align: right;
+    }
+
+    .loc__address p {
+      font-size: 13px;
+      font-weight: 400;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .loc__address a {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #0f1f12;
+      text-decoration: none;
+      border-bottom: 1.5px solid #0f1f12;
+      padding-bottom: 4px;
+      transition: color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .loc__address a:hover {
+      color: #4aaa33;
+      border-color: #4aaa33;
+    }
+
+    /* map wrapper — clips in from bottom */
+    .loc__map-wrap {
+      width: 100%;
+      height: 560px;
+      overflow: hidden;
+      clip-path: inset(100% 0% 0% 0%);
+      transition: clip-path 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .loc__map-wrap.reveal {
+      clip-path: inset(0% 0% 0% 0%);
+    }
+
+    .loc__map-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      filter: grayscale(20%) contrast(1.05);
+      transition: filter 0.5s ease;
+    }
+
+    .loc__map-wrap:hover iframe {
+      filter: grayscale(0%) contrast(1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HERO ── -->
+  <section class="hero" id="hero">
+
+    <!-- Video -->
+    <div class="hero__video" aria-hidden="true">
+      <video autoplay muted playsinline loop>
+        <source src="videos/maintenance_vid.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <!-- Nav -->
+    <nav class="nav" id="siteNav">
+      <a href="home.html" class="nav__logo">Mint Landscape</a>
+      <ul class="nav__links">
+        <li><a href="maintenance.html" class="active">Maintenance</a></li>
+        <li><a href="construction.html">Construction</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- Content -->
+    <div class="hero__content">
+      <h1 class="hero__heading" id="heroHeading">
+        Mint Landscape is your trusted partner<br>
+        for pristine, recurring grounds maintenance.<br>
+        Delivered with unwavering consistency.
+      </h1>
+      <div class="hero__bottom" id="heroBottom">
+        <!-- Scroll down — left -->
+        <a href="#content" class="scroll-btn" aria-label="Scroll down">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <polyline points="19 12 12 19 5 12"/>
+          </svg>
+        </a>
+        <!-- Get a quote — right -->
+        <a href="contact.html#quote" class="quote-btn">
+          <span>Get a Quote</span>
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── SCROLL CONTENT ── -->
+  <div class="page-content" id="content">
+
+    <!-- Intro: video left, text right -->
+    <div class="intro-section" id="introSection">
+
+      <div class="intro-section__video-wrap" id="introVideo">
+        <video autoplay muted playsinline loop>
+          <source src="videos/maintenance_vid_2.mp4" type="video/mp4" />
+        </video>
+      </div>
+
+      <div class="intro-section__text">
+        <h2 class="intro-section__heading" id="introHeading">
+          Industry leaders<br>in the field.
+        </h2>
+        <div class="intro-section__body" id="introBody">
+          <p>
+            We stay ahead of the curve  always current on the latest industry
+            standards, techniques, and technologies. Eco-conscious practices
+            and sustainable products aren't an afterthought; they're woven into
+            everything we do.
+          </p>
+          <p>
+            We offer a comprehensive range of landscape maintenance packages
+            carefully crafted to serve the unique needs of every client 
+            from residential properties to large commercial grounds.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── WHO WE SERVE ── -->
+    <section class="wws" id="wwsSection">
+
+      <div class="wws__label" id="wwsLabel">
+        <h2>Who we serve.</h2>
+      </div>
+
+      <div class="wws__grid">
+
+        <!-- Card 1: Multifamily -->
+        <div class="wws__card">
+          <div class="wws__card-img" style="background-image:url('images/mian_house_1.jpg')"></div>
+          <div class="wws__card-text" id="wwsCard1">
+            <h3 class="wws__card-heading">Multifamily &amp;<br>Strata Buildings</h3>
+            <p class="wws__card-body">
+              From high-rises to townhouse complexes, we keep
+              multifamily and strata properties looking their best
+              year-round  cultivating eco-friendly environments
+              that residents are proud to call home.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 2: Commercial -->
+        <div class="wws__card">
+          <div class="wws__card-img" style="background-image:url('images/mian_house_2.png')"></div>
+          <div class="wws__card-text" id="wwsCard2">
+            <h3 class="wws__card-heading">Commercial<br>Properties</h3>
+            <p class="wws__card-body">
+              Office parks, retail centres, hospitality venues,
+              and public spaces  our commercial maintenance
+              programs create welcoming, sustainable landscapes
+              that leave a lasting impression on everyone who visits.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 3: Residential -->
+        <div class="wws__card">
+          <div class="wws__card-img" style="background-image:url('images/main_house_3.png')"></div>
+          <div class="wws__card-text" id="wwsCard3">
+            <h3 class="wws__card-heading">Residential<br>Properties</h3>
+            <p class="wws__card-body">
+              Custom homes, large estates, acreage properties 
+              we design maintenance programs that connect your
+              home to the landscape around it, creating spaces
+              that thrive through every season.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ── SERVICES SECTION ── -->
+    <section class="svc" id="svcSection">
+
+      <h2 class="svc__heading" id="svcHeading">Our Maintenance Services.</h2>
+
+      <div class="svc__grid">
+
+        <!-- Left: Garden -->
+        <div class="svc__col">
+          <p class="svc__col-label" id="svcLabelL">Garden Maintenance</p>
+          <ul class="svc__list" id="svcListL">
+            <li>Lawn mowing &amp; year-round turf care</li>
+            <li>Gardening &amp; full garden maintenance</li>
+            <li>Plant health assessments &amp; treatment</li>
+            <li>Precision pruning, trimming &amp; hedging</li>
+            <li>Tree care &amp; certified arborist services</li>
+            <li>Weed removal &amp; long-term weed control</li>
+            <li>Spring &amp; fall seasonal clean-ups</li>
+            <li>Customised seasonal lawn care programs</li>
+          </ul>
+          <a href="#" class="svc__link" id="svcLinkL">
+            <span>Explore garden maintenance</span>
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+
+        <!-- Right: Irrigation -->
+        <div class="svc__col">
+          <p class="svc__col-label" id="svcLabelR">Irrigation</p>
+          <ul class="svc__list" id="svcListR">
+            <li>Seasonal maintenance &amp; service packages</li>
+            <li>Spring start-up &amp; fall winterization</li>
+            <li>Annual system diagnostics &amp; tune-ups</li>
+            <li>Ongoing in-season monitoring &amp; adjustments</li>
+            <li>Smart controller optimisation &amp; programming</li>
+            <li>System upgrades, repairs &amp; replacements</li>
+          </ul>
+          <a href="#" class="svc__link" id="svcLinkR">
+            <span>Explore irrigation services</span>
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Centre CTA -->
+      <div class="svc__cta-wrap" id="svcCta">
+        <a href="contact.html#quote" class="svc__cta">
+          <span>Book a Quotation</span>
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- ── LOCATION SECTION ── -->
+  <section class="loc" id="locSection">
+
+    <div class="loc__top" id="locTop">
+      <h2 class="loc__heading">Where we are.</h2>
+      <div class="loc__address">
+        <p>170 – 422 Richards St<br>Vancouver, BC V6B 2Z4</p>
+        <a href="https://maps.google.com/?q=170-422+Richards+St,+Vancouver,+BC+V6B+2Z4" target="_blank" rel="noopener">Get directions &rarr;</a>
+      </div>
+    </div>
+
+    <div class="loc__map-wrap" id="locMap">
+      <iframe
+        src="https://maps.google.com/maps?q=422+Richards+St,+Vancouver,+BC+V6B+2Z4&output=embed&z=15"
+        allowfullscreen
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Mint Landscape location"
+      ></iframe>
+    </div>
+
+  </section>
+
+  <script>
+    // Hero animations — 1s delay
+    setTimeout(function () {
+      document.getElementById('siteNav').classList.add('show');
+
+      setTimeout(function () {
+        document.getElementById('heroHeading').classList.add('show');
+      }, 150);
+
+      setTimeout(function () {
+        document.getElementById('heroBottom').classList.add('show');
+      }, 400);
+    }, 1000);
+
+    // Scroll section — Intersection Observer
+    var introObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          // Video expands outward immediately
+          document.getElementById('introVideo').classList.add('reveal');
+
+          // Heading fades in after 1s
+          setTimeout(function () {
+            document.getElementById('introHeading').classList.add('show');
+          }, 1000);
+
+          // Body text fades in after 2s
+          setTimeout(function () {
+            document.getElementById('introBody').classList.add('show');
+          }, 2000);
+
+          introObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.15 });
+
+    introObserver.observe(document.getElementById('introSection'));
+
+    // Who We Serve observer
+    var wwsObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          // Section label
+          document.getElementById('wwsLabel').classList.add('show');
+
+          // Card headings stagger in
+          setTimeout(function () {
+            document.getElementById('wwsCard1').classList.add('show');
+          }, 300);
+          setTimeout(function () {
+            document.getElementById('wwsCard2').classList.add('show');
+          }, 500);
+          setTimeout(function () {
+            document.getElementById('wwsCard3').classList.add('show');
+          }, 700);
+
+          wwsObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.12 });
+
+    wwsObserver.observe(document.getElementById('wwsSection'));
+
+    // Services section observer
+    var svcObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+
+        document.getElementById('svcHeading').classList.add('show');
+
+        // Labels
+        setTimeout(function () {
+          document.getElementById('svcLabelL').classList.add('show');
+          document.getElementById('svcLabelR').classList.add('show');
+        }, 400);
+
+        // Stagger each list item
+        var listsL = document.querySelectorAll('#svcListL li');
+        var listsR = document.querySelectorAll('#svcListR li');
+        listsL.forEach(function (li, i) {
+          li.style.transitionDelay = (0.55 + i * 0.08) + 's';
+          setTimeout(function () { li.classList.add('show'); }, 10);
+        });
+        listsR.forEach(function (li, i) {
+          li.style.transitionDelay = (0.65 + i * 0.08) + 's';
+          setTimeout(function () { li.classList.add('show'); }, 10);
+        });
+
+        // Link buttons
+        setTimeout(function () {
+          document.getElementById('svcLinkL').classList.add('show');
+          document.getElementById('svcLinkR').classList.add('show');
+        }, 1300);
+
+        // CTA button
+        setTimeout(function () {
+          document.getElementById('svcCta').classList.add('show');
+        }, 1500);
+
+        svcObserver.disconnect();
+      });
+    }, { threshold: 0.1 });
+
+    svcObserver.observe(document.getElementById('svcSection'));
+
+    // Location section observer
+    var locObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        document.getElementById('locTop').classList.add('show');
+        setTimeout(function () {
+          document.getElementById('locMap').classList.add('reveal');
+        }, 350);
+        locObserver.disconnect();
+      });
+    }, { threshold: 0.1 });
+
+    locObserver.observe(document.getElementById('locSection'));
+  </script>
+
+</body>
+</html>

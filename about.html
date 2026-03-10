@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us — Mint Landscape</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #0a140c;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* ─────────────────────────────
+       HERO
+    ───────────────────────────── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .hero__bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .hero__bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      animation: bgDrift 24s ease-in-out infinite alternate;
+    }
+
+    @keyframes bgDrift {
+      from { transform: scale(1.00); }
+      to   { transform: scale(1.07); }
+    }
+
+    .hero__bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.10) 0%,
+        rgba(0,0,0,0.22) 40%,
+        rgba(0,0,0,0.70) 100%
+      );
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: rgba(255,255,255,0.18);
+      z-index: 10;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 52px;
+      opacity: 0;
+      transform: translateY(-12px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+
+    .nav.show { opacity: 1; transform: translateY(0); }
+
+    .nav__logo {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 7px;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .nav__links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav__links a {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.72);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .nav__links a:hover,
+    .nav__links a.active { color: #fff; }
+
+    /* ── HERO CONTENT ── */
+    .hero__content {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 52px 52px;
+    }
+
+    .hero__heading {
+      font-size: clamp(28px, 3.8vw, 62px);
+      font-weight: 500;
+      color: #ffffff;
+      line-height: 1.25;
+      max-width: 860px;
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .hero__heading.show { opacity: 1; transform: translateY(0); }
+
+    .hero__bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 44px;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s ease 0.18s, transform 0.7s ease 0.18s;
+    }
+
+    .hero__bottom.show { opacity: 1; transform: translateY(0); }
+
+    .scroll-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.50);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .scroll-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.10);
+      transform: scale(0);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .scroll-btn:hover::before { transform: scale(1); }
+    .scroll-btn:hover { border-color: rgba(255,255,255,0.90); transform: translateY(3px); }
+
+    .scroll-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 1.8;
+      position: relative;
+      z-index: 1;
+    }
+
+    .quote-btn {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #0a140c;
+      text-decoration: none;
+      background: #ffffff;
+      border: 1.5px solid #ffffff;
+      border-radius: 100px;
+      padding: 15px 42px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      z-index: 0;
+      transition: color 0.35s ease, transform 0.18s ease;
+    }
+
+    .quote-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 100px;
+      background: #2a5c35;
+      transform: translateX(-101%);
+      transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1;
+    }
+
+    .quote-btn:hover::after { transform: translateX(0); }
+    .quote-btn:hover { color: #ffffff; transform: translateY(-2px); }
+    .quote-btn:active { transform: translateY(0); }
+    .quote-btn span { position: relative; z-index: 2; }
+
+    /* ─────────────────────────────
+       SCROLL CONTENT
+    ───────────────────────────── */
+    .page-content {
+      background: #f4f3f0;
+      overflow: hidden;
+    }
+
+    /* ─────────────────────────────
+       SECTION 1 — OUR MISSION
+       image left, text right
+    ───────────────────────────── */
+    .mission {
+      display: flex;
+      align-items: stretch;
+      min-height: 100vh;
+    }
+
+    .mission__img {
+      flex: 0 0 55%;
+      position: relative;
+      overflow: hidden;
+      clip-path: inset(6% 6% 6% 6% round 18px);
+      transition: clip-path 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mission__img.reveal {
+      clip-path: inset(0% 0% 0% 0% round 0px);
+    }
+
+    .mission__img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .mission__text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 72px 80px 80px;
+      background: #f4f3f0;
+    }
+
+    .mission__eyebrow {
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #4aaa33;
+      margin-bottom: 28px;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .mission__eyebrow.show { opacity: 1; transform: translateY(0); }
+
+    .mission__heading {
+      font-size: clamp(26px, 2.6vw, 42px);
+      font-weight: 700;
+      color: #0f1f12;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      margin-bottom: 36px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .mission__heading.show { opacity: 1; transform: translateY(0); }
+
+    .mission__rule {
+      width: 0;
+      height: 1.5px;
+      background: #4aaa33;
+      margin-bottom: 36px;
+      transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .mission__rule.show { width: 48px; }
+
+    .mission__body {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .mission__body.show { opacity: 1; transform: translateY(0); }
+
+    .mission__body p {
+      font-size: clamp(13px, 1.05vw, 15.5px);
+      font-weight: 300;
+      color: #3a3a3a;
+      line-height: 1.82;
+      max-width: 400px;
+    }
+
+    .mission__body p + p { margin-top: 22px; }
+
+    /* ─────────────────────────────
+       SECTION 2 — COMMUNITY
+       text left, image right
+    ───────────────────────────── */
+    .community {
+      display: flex;
+      align-items: stretch;
+      min-height: 100vh;
+      background: #0f1f12;
+    }
+
+    .community__text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 80px 80px 72px;
+    }
+
+    .community__eyebrow {
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #4aaa33;
+      margin-bottom: 28px;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .community__eyebrow.show { opacity: 1; transform: translateY(0); }
+
+    .community__heading {
+      font-size: clamp(26px, 2.6vw, 42px);
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      margin-bottom: 36px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .community__heading.show { opacity: 1; transform: translateY(0); }
+
+    .community__rule {
+      width: 0;
+      height: 1.5px;
+      background: #4aaa33;
+      margin-bottom: 36px;
+      transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .community__rule.show { width: 48px; }
+
+    .community__body {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .community__body.show { opacity: 1; transform: translateY(0); }
+
+    .community__body p {
+      font-size: clamp(13px, 1.05vw, 15.5px);
+      font-weight: 300;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.82;
+      max-width: 400px;
+    }
+
+    .community__body p + p { margin-top: 22px; }
+
+    .community__img {
+      flex: 0 0 55%;
+      position: relative;
+      overflow: hidden;
+      clip-path: inset(6% 6% 6% 6% round 18px);
+      transition: clip-path 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .community__img.reveal {
+      clip-path: inset(0% 0% 0% 0% round 0px);
+    }
+
+    .community__img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ─────────────────────────────
+       SECTION 3 — WHY CHOOSE US
+    ───────────────────────────── */
+    .why {
+      background: #f4f3f0;
+      padding: 130px 72px 150px;
+    }
+
+    .why__header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 60px;
+      margin-bottom: 96px;
+    }
+
+    .why__title {
+      font-size: clamp(42px, 5.5vw, 82px);
+      font-weight: 700;
+      color: #0f1f12;
+      line-height: 1.02;
+      letter-spacing: -1.5px;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.85s ease, transform 0.85s ease;
+    }
+    .why__title.show { opacity: 1; transform: translateY(0); }
+
+    .why__intro {
+      max-width: 420px;
+      padding-top: 18px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.85s ease 0.18s, transform 0.85s ease 0.18s;
+    }
+    .why__intro.show { opacity: 1; transform: translateY(0); }
+
+    .why__intro p {
+      font-size: clamp(13px, 1.0vw, 15px);
+      font-weight: 300;
+      color: #3a3a3a;
+      line-height: 1.84;
+    }
+
+    .why__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      perspective: 1200px;
+      overflow: visible;
+    }
+
+    .why__card {
+      padding: 44px;
+      border-top: 1px solid rgba(15,31,18,0.14);
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.65s ease, transform 0.65s ease,
+                  box-shadow 0.35s ease, background 0.25s ease;
+      cursor: default;
+      will-change: transform;
+      position: relative;
+    }
+    .why__card.show { opacity: 1; transform: translateY(0); }
+
+    .why__card:not(:nth-child(3n)) {
+      border-right: 1px solid rgba(15,31,18,0.14);
+    }
+
+    .why__card:hover {
+      box-shadow: 0 28px 64px -12px rgba(15,31,18,0.22),
+                  0 8px 24px -4px rgba(15,31,18,0.12);
+      z-index: 2;
+      background: #fff;
+      border-radius: 6px;
+    }
+
+    .why__card__icon {
+      width: 34px;
+      height: 34px;
+      margin-bottom: 18px;
+    }
+
+    .why__card__icon svg {
+      width: 34px;
+      height: 34px;
+      stroke: #0f1f12;
+      fill: none;
+      stroke-width: 1.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .why__card__name {
+      font-size: clamp(14px, 1.05vw, 16.5px);
+      font-weight: 600;
+      color: #0f1f12;
+      letter-spacing: -0.2px;
+      margin-bottom: 14px;
+    }
+
+    .why__card__line {
+      width: 30px;
+      height: 1.5px;
+      background: #4aaa33;
+      margin-bottom: 16px;
+    }
+
+    .why__card__desc {
+      font-size: clamp(12px, 0.88vw, 13.5px);
+      font-weight: 300;
+      color: #555;
+      line-height: 1.80;
+    }
+
+    /* CTA at bottom */
+    .why__cta {
+      display: flex;
+      justify-content: center;
+      padding-top: 100px;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .why__cta.show { opacity: 1; transform: translateY(0); }
+
+    .why__quote-btn {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+      background: #0f1f12;
+      border: 1.5px solid #0f1f12;
+      border-radius: 100px;
+      padding: 18px 60px;
+      position: relative;
+      overflow: hidden;
+      z-index: 0;
+      transition: color 0.35s ease, transform 0.18s ease;
+      cursor: pointer;
+    }
+    .why__quote-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 100px;
+      background: #2a5c35;
+      transform: translateX(-101%);
+      transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1;
+    }
+    .why__quote-btn:hover::after { transform: translateX(0); }
+    .why__quote-btn:hover { color: #fff; transform: translateY(-2px); }
+    .why__quote-btn:active { transform: translateY(0); }
+    .why__quote-btn span { position: relative; z-index: 2; }
+  </style>
+</head>
+<body>
+
+  <!-- ── HERO ── -->
+  <section class="hero" id="hero">
+
+    <div class="hero__bg" aria-hidden="true">
+      <img src="images/about_1.jpg" alt="" />
+    </div>
+
+    <nav class="nav" id="siteNav">
+      <a href="home.html" class="nav__logo">Mint Landscape</a>
+      <ul class="nav__links">
+        <li><a href="maintenance.html">Maintenance</a></li>
+        <li><a href="construction.html">Construction</a></li>
+        <li><a href="about.html" class="active">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="hero__content">
+      <h1 class="hero__heading" id="heroHeading">
+        Rooted in British Columbia.<br>
+        Built on craft, honesty, and a genuine<br>
+        love for the land we work with.
+      </h1>
+      <div class="hero__bottom" id="heroBottom">
+        <a href="#content" class="scroll-btn" aria-label="Scroll down">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <polyline points="19 12 12 19 5 12"/>
+          </svg>
+        </a>
+        <a href="contact.html#quote" class="quote-btn">
+          <span>Get a Quote</span>
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── SCROLL CONTENT ── -->
+  <div class="page-content" id="content">
+
+    <!-- ── SECTION 1: OUR MISSION ── -->
+    <div class="mission" id="missionSection">
+
+      <div class="mission__img" id="missionImg">
+        <img src="images/about_1.jpg" alt="Mint Landscape team at work" />
+      </div>
+
+      <div class="mission__text">
+        <p class="mission__eyebrow" id="missionEyebrow">Our Mission</p>
+        <h2 class="mission__heading" id="missionHeading">
+          Shaping BC one<br>property at a time.
+        </h2>
+        <div class="mission__rule" id="missionRule"></div>
+        <div class="mission__body" id="missionBody">
+          <p>
+            Mint Landscape was founded on a straightforward idea: that every
+            outdoor space deserves to be treated with the same care and
+            skill as the people who live and work in it. We are a BC landscaping
+            company driven by a genuine passion for the craft, not just the
+            contract.
+          </p>
+          <p>
+            Our team brings together experienced horticulturists, skilled
+            tradespeople, and dedicated project managers who share a common
+            standard. We listen first, plan carefully, and build things that
+            last. Whether the project is a private residence, a large commercial
+            site, or a strata complex, our commitment to quality does not change.
+          </p>
+          <p>
+            We take on work we know we can deliver exceptionally well. That
+            selectiveness is what lets us put our name on every job with confidence.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── SECTION 2: COMMUNITY ── -->
+    <div class="community" id="communitySection">
+
+      <div class="community__text">
+        <p class="community__eyebrow" id="communityEyebrow">Community</p>
+        <h2 class="community__heading" id="communityHeading">
+          Good landscapes<br>build good places.
+        </h2>
+        <div class="community__rule" id="communityRule"></div>
+        <div class="community__body" id="communityBody">
+          <p>
+            We serve a wide range of clients across the Lower Mainland and
+            greater BC, from families wanting a backyard they can actually
+            use, to developers who need a trusted landscaping partner from
+            groundbreak to handover.
+          </p>
+          <p>
+            The spaces we build and maintain become part of neighbourhoods.
+            They affect how people feel walking to their front door, how
+            residents interact with shared outdoor areas, and how a business
+            presents itself to the world. We take that seriously.
+          </p>
+          <p>
+            Building strong relationships with our clients and giving back to
+            the communities we work in is not a side note. It is part of what
+            drives us to keep doing this work well.
+          </p>
+        </div>
+      </div>
+
+      <div class="community__img" id="communityImg">
+        <img src="images/about_2.jpeg" alt="Mint Landscape community work" />
+      </div>
+
+    </div>
+
+    <!-- ── SECTION 3: WHY CHOOSE US ── -->
+    <section class="why" id="whySection">
+
+      <div class="why__header" id="whyHeader">
+        <h2 class="why__title" id="whyTitle">Why<br>Choose Us.</h2>
+        <div class="why__intro" id="whyIntro">
+          <p>
+            There are many landscaping companies in BC. Here is what makes
+            working with Mint a different experience from the first call to
+            the final walkthrough.
+          </p>
+        </div>
+      </div>
+
+      <div class="why__grid" id="whyGrid">
+
+        <div class="why__card" data-why>
+          <div class="why__card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
+          <p class="why__card__name">Real Expertise</p>
+          <div class="why__card__line"></div>
+          <p class="why__card__desc">Our team is made up of qualified horticulturists, experienced tradespeople, and project managers who have worked on some of the most demanding sites in the province. You get depth of knowledge, not just labour.</p>
+        </div>
+
+        <div class="why__card" data-why>
+          <div class="why__card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <p class="why__card__name">A Team That Listens</p>
+          <div class="why__card__line"></div>
+          <p class="why__card__desc">Every property is different. Before we propose anything, we take the time to understand your goals, your site, and your expectations. What we build is shaped by that conversation, not by a template.</p>
+        </div>
+
+        <div class="why__card" data-why>
+          <div class="why__card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <p class="why__card__name">Consistent Quality</p>
+          <div class="why__card__line"></div>
+          <p class="why__card__desc">We hold the same standard on a small residential job as we do on a large commercial development. Quality is not something we reserve for certain clients. It is the baseline we start from every time.</p>
+        </div>
+
+        <div class="why__card" data-why>
+          <div class="why__card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <p class="why__card__name">On Time, Every Time</p>
+          <div class="why__card__line"></div>
+          <p class="why__card__desc">We plan our projects thoroughly so that timelines are realistic from the start. When we commit to a schedule, we keep it. Delays cost you money and trust, and we treat both with respect.</p>
+        </div>
+
+        <div class="why__card" data-why>
+          <div class="why__card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <p class="why__card__name">Transparent Process</p>
+          <div class="why__card__line"></div>
+          <p class="why__card__desc">No hidden costs, no surprises mid-project. We communicate clearly at every stage, and if something changes we tell you straight away. You always know where your project stands.</p>
+        </div>
+
+        <div class="why__card" data-why>
+          <div class="why__card__icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </div>
+          <p class="why__card__name">BC Focused</p>
+          <div class="why__card__line"></div>
+          <p class="why__card__desc">We know this province intimately. Our understanding of BC's varied climates, soil conditions, and plant communities means we design and build with the local environment in mind, not against it.</p>
+        </div>
+
+      </div>
+
+      <div class="why__cta" id="whyCta">
+        <a href="contact.html#quote" class="why__quote-btn"><span>Get a Quote</span></a>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script>
+    // Hero entrance
+    setTimeout(function () {
+      document.getElementById('siteNav').classList.add('show');
+      setTimeout(function () { document.getElementById('heroHeading').classList.add('show'); }, 150);
+      setTimeout(function () { document.getElementById('heroBottom').classList.add('show'); }, 400);
+    }, 1000);
+
+    function makeRevealObs(threshold, onEnter, onLeave) {
+      return new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) { onEnter(entry.target); }
+          else { if (onLeave) onLeave(entry.target); }
+        });
+      }, { threshold: threshold || 0.15 });
+    }
+
+    // ── Mission section ──
+    makeRevealObs(0.15,
+      function() {
+        document.getElementById('missionImg').classList.add('reveal');
+        setTimeout(function(){ document.getElementById('missionEyebrow').classList.add('show'); }, 400);
+        setTimeout(function(){ document.getElementById('missionHeading').classList.add('show'); }, 650);
+        setTimeout(function(){ document.getElementById('missionRule').classList.add('show'); }, 900);
+        setTimeout(function(){ document.getElementById('missionBody').classList.add('show'); }, 1050);
+      },
+      function() {
+        document.getElementById('missionImg').classList.remove('reveal');
+        document.getElementById('missionEyebrow').classList.remove('show');
+        document.getElementById('missionHeading').classList.remove('show');
+        document.getElementById('missionRule').classList.remove('show');
+        document.getElementById('missionBody').classList.remove('show');
+      }
+    ).observe(document.getElementById('missionSection'));
+
+    // ── Community section ──
+    makeRevealObs(0.15,
+      function() {
+        document.getElementById('communityImg').classList.add('reveal');
+        setTimeout(function(){ document.getElementById('communityEyebrow').classList.add('show'); }, 400);
+        setTimeout(function(){ document.getElementById('communityHeading').classList.add('show'); }, 650);
+        setTimeout(function(){ document.getElementById('communityRule').classList.add('show'); }, 900);
+        setTimeout(function(){ document.getElementById('communityBody').classList.add('show'); }, 1050);
+      },
+      function() {
+        document.getElementById('communityImg').classList.remove('reveal');
+        document.getElementById('communityEyebrow').classList.remove('show');
+        document.getElementById('communityHeading').classList.remove('show');
+        document.getElementById('communityRule').classList.remove('show');
+        document.getElementById('communityBody').classList.remove('show');
+      }
+    ).observe(document.getElementById('communitySection'));
+
+    // ── Why Choose Us header ──
+    makeRevealObs(0.2,
+      function() {
+        document.getElementById('whyTitle').classList.add('show');
+        setTimeout(function(){ document.getElementById('whyIntro').classList.add('show'); }, 180);
+      },
+      function() {
+        document.getElementById('whyTitle').classList.remove('show');
+        document.getElementById('whyIntro').classList.remove('show');
+      }
+    ).observe(document.getElementById('whyHeader'));
+
+    // ── Why cards ──
+    var whyCards = Array.from(document.querySelectorAll('[data-why]'));
+    var whyCardObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        var col = whyCards.indexOf(entry.target) % 3;
+        if (entry.isIntersecting) {
+          setTimeout(function(){ entry.target.classList.add('show'); }, col * 140);
+        } else {
+          entry.target.classList.remove('show');
+        }
+      });
+    }, { threshold: 0.12 });
+    whyCards.forEach(function(c) { whyCardObs.observe(c); });
+
+    // ── CTA ──
+    makeRevealObs(0.4,
+      function(el){ el.classList.add('show'); },
+      function(el){ el.classList.remove('show'); }
+    ).observe(document.getElementById('whyCta'));
+
+    // ── 3D tilt on why cards ──
+    whyCards.forEach(function(card) {
+      card.addEventListener('mousemove', function(e) {
+        var rect = card.getBoundingClientRect();
+        var dx = (e.clientX - rect.left - rect.width  / 2) / (rect.width  / 2);
+        var dy = (e.clientY - rect.top  - rect.height / 2) / (rect.height / 2);
+        card.style.transform = 'translateY(-6px) rotateX(' + (dy * -6) + 'deg) rotateY(' + (dx * 6) + 'deg) scale(1.01)';
+        card.style.transition = 'box-shadow 0.2s ease, background 0.2s ease';
+      });
+      card.addEventListener('mouseleave', function() {
+        card.style.transform = '';
+        card.style.transition = 'opacity 0.65s ease, transform 0.55s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s ease';
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mint Landscape</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      background: #0a140c;
+    }
+    body { overflow-x: hidden; }
+    body.no-scroll { overflow: hidden; }
+
+    /* ── VIDEO — always full screen, always playing ── */
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-video video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* bottom gradient to give text a readable base */
+    .hero-video::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.10) 0%,
+        rgba(0,0,0,0.18) 45%,
+        rgba(0,0,0,0.55) 100%
+      );
+      pointer-events: none;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 52px;
+      opacity: 0;
+      transition: opacity 0.9s ease 0.2s, background-color 0.35s ease, padding 0.3s ease;
+    }
+
+    .nav.show { opacity: 1; }
+    .nav.scrolled {
+      background: rgba(10,20,12,0.97);
+      padding: 18px 52px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .nav__logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 7px;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .nav__links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav__links a {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.72);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .nav__links a:hover { color: #fff; }
+
+    /* ── PANELS — sit over the bottom half, fully transparent ── */
+    .panels {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 46%;
+      display: flex;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    /* shared panel */
+    .panel {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 56px 52px;
+      pointer-events: all;
+      position: relative;
+    }
+
+    /* vertical divider between the two panels */
+    .panel--left::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 1px;
+      height: 100%;
+      background: rgba(255,255,255,0.18);
+    }
+
+    /* ── SLIDE-IN ANIMATION ── */
+    .panel--left {
+      transform: translateX(-100%);
+      transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .panel--right {
+      transform: translateX(100%);
+      transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .panels.animate .panel--left,
+    .panels.animate .panel--right {
+      transform: translateX(0);
+    }
+
+    /* ── PANEL CONTENT — staggered fade-up ── */
+    .panel__eyebrow,
+    .panel__heading,
+    .panel__btn {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .panels.animate .panel__eyebrow {
+      opacity: 1; transform: none;
+      transition-delay: 0.8s;
+    }
+    .panels.animate .panel__heading {
+      opacity: 1; transform: none;
+      transition-delay: 0.95s;
+    }
+    .panels.animate .panel__btn {
+      opacity: 1; transform: none;
+      transition-delay: 1.1s;
+    }
+
+    .panel__eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 14px;
+    }
+
+    .panel__heading {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(18px, 1.9vw, 28px);
+      font-weight: 300;
+      color: #ffffff;
+      line-height: 1.55;
+      margin-bottom: 28px;
+      max-width: 340px;
+    }
+
+    /* outlined pill button — fill-from-left on hover */
+    .panel__btn {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-decoration: none;
+      border: 1.5px solid rgba(255,255,255,0.55);
+      border-radius: 100px;
+      padding: 13px 36px;
+      background: transparent;
+      cursor: pointer;
+      width: fit-content;
+      position: relative;
+      overflow: hidden;
+      z-index: 0;
+      transition:
+        border-color 0.35s ease,
+        color 0.35s ease,
+        transform 0.18s ease;
+    }
+
+    .panel__btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #ffffff;
+      border-radius: 100px;
+      transform: translateX(-101%);
+      transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: -1;
+    }
+
+    .panel__btn:hover::before { transform: translateX(0); }
+
+    .panel__btn:hover {
+      border-color: #ffffff;
+      color: #0a140c;
+      transform: translateY(-2px);
+    }
+
+    .panel__btn:active { transform: translateY(0); }
+
+    /* ── HERO SECTION WRAPPER ── */
+    .hero-section {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ─────────────────────────────
+       REQUEST QUOTE BANNER
+    ───────────────────────────── */
+    .rq-section {
+      position: relative;
+      height: 56vh;
+      min-height: 420px;
+      background: url('images/home_image_1.jpeg') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .rq-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.50);
+    }
+
+    .rq-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 34px;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.85s ease, transform 0.85s ease;
+    }
+    .rq-inner.show { opacity: 1; transform: translateY(0); }
+
+    .rq-heading {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(40px, 6vw, 88px);
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -2.5px;
+      line-height: 1;
+    }
+
+    .rq-btn {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+      border: 1.5px solid rgba(255,255,255,0.65);
+      border-radius: 100px;
+      padding: 14px 46px;
+      position: relative;
+      overflow: hidden;
+      z-index: 0;
+      transition: border-color 0.3s ease, color 0.3s ease, transform 0.18s ease;
+    }
+    .rq-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 100px;
+      background: #4aaa33;
+      transform: translateX(-101%);
+      transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: -1;
+    }
+    .rq-btn:hover::after { transform: translateX(0); }
+    .rq-btn:hover { border-color: #4aaa33; transform: translateY(-2px); }
+    .rq-btn:active { transform: translateY(0); }
+
+    /* ─────────────────────────────
+       AREAS WE SERVE
+    ───────────────────────────── */
+    .areas-home {
+      display: flex;
+      align-items: stretch;
+      background: #f4f3f0;
+      min-height: 560px;
+    }
+
+    .areas-home__map {
+      flex: 0 0 50%;
+      overflow: hidden;
+    }
+    .areas-home__map iframe {
+      width: 100%;
+      height: 100%;
+      min-height: 560px;
+      border: none;
+      display: block;
+      filter: grayscale(10%) contrast(1.05);
+    }
+
+    .areas-home__content {
+      flex: 1;
+      padding: 80px 72px 80px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.85s ease, transform 0.85s ease;
+    }
+    .areas-home__content.show { opacity: 1; transform: translateY(0); }
+
+    .areas-home__title {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(36px, 4vw, 64px);
+      font-weight: 800;
+      color: #0f1f12;
+      letter-spacing: -2px;
+      line-height: 1.05;
+      margin-bottom: 28px;
+    }
+
+    .areas-home__rule {
+      width: 48px;
+      height: 2px;
+      background: #4aaa33;
+      margin-bottom: 28px;
+    }
+
+    .areas-home__body {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: #555;
+      line-height: 1.85;
+      max-width: 400px;
+    }
+    .areas-home__body p + p { margin-top: 14px; }
+    .areas-home__note { font-size: 11.5px; color: rgba(85,85,85,0.55); }
+  </style>
+</head>
+<body>
+
+  <section class="hero-section" id="heroSection">
+
+  <!-- Background Video — always playing -->
+  <div class="hero-video" aria-hidden="true">
+    <video autoplay muted playsinline loop id="bgVideo">
+      <source src="videos/vid_edit_1.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav" id="siteNav" aria-label="Main navigation">
+    <a href="home.html" class="nav__logo">Mint Landscape</a>
+    <ul class="nav__links">
+      <li><a href="maintenance.html">Maintenance</a></li>
+      <li><a href="construction.html">Construction</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Transparent Split Panels -->
+  <div class="panels" id="panels">
+
+    <!-- Left · Maintenance -->
+    <div class="panel panel--left">
+      <p class="panel__eyebrow">Maintenance</p>
+      <h2 class="panel__heading">Your trusted partner for<br>pristine grounds,<br>every season.</h2>
+      <a href="maintenance.html" class="panel__btn">Maintenance Services</a>
+    </div>
+
+    <!-- Right · Construction -->
+    <div class="panel panel--right">
+      <p class="panel__eyebrow">Construction</p>
+      <h2 class="panel__heading">Your vision, our passion,<br>expertly built from<br>the ground up.</h2>
+      <a href="construction.html" class="panel__btn">Construction Services</a>
+    </div>
+
+  </div>
+
+  </section><!-- /.hero-section -->
+
+  <!-- ── REQUEST QUOTE BANNER ── -->
+  <section class="rq-section" id="rqSection">
+    <div class="rq-inner" id="rqInner">
+      <h2 class="rq-heading">Request Quote</h2>
+      <a href="contact.html#quote" class="rq-btn">Reach Out Now</a>
+    </div>
+  </section>
+
+  <!-- ── AREAS WE SERVE ── -->
+  <section class="areas-home" id="areasHome">
+    <div class="areas-home__map">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2602.5!2d-123.1195!3d49.2813!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5486717f41ba2fb9%3A0x36dfc0a2b5d9e24!2s422%20Richards%20St%20%23170%2C%20Vancouver%2C%20BC%20V6B%202Z4!5e0!3m2!1sen!2sca!4v1710000000000!5m2!1sen!2sca"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Mint Landscape office — 422 Richards St, Vancouver"
+      ></iframe>
+    </div>
+    <div class="areas-home__content" id="areasContent">
+      <h2 class="areas-home__title">Areas We Serve</h2>
+      <div class="areas-home__rule"></div>
+      <div class="areas-home__body">
+        <p>We service Residential, Strata, Commercial and Industrial properties in Vancouver, the North Shore, and the Sea to Sky Corridor.</p>
+        <p>We are proud to offer Landscape Design, Maintenance, Installation, Carpentry and Construction services in these areas.*</p>
+        <p class="areas-home__note">*Some exceptions may apply</p>
+        <p style="margin-top:24px;">Contact us today to learn how we can assist with your next landscaping project and elevate your outdoor space to new heights.</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Lock scroll until intro animation completes
+    document.body.classList.add('no-scroll');
+
+    // After 2s of video playing, animate panels + nav in
+    setTimeout(function () {
+      document.getElementById('panels').classList.add('animate');
+      document.getElementById('siteNav').classList.add('show');
+      document.body.classList.remove('no-scroll');
+    }, 2000);
+
+    // Nav gets dark background once user scrolls
+    window.addEventListener('scroll', function () {
+      document.getElementById('siteNav').classList.toggle('scrolled', window.scrollY > 80);
+    });
+
+    // Bidirectional scroll reveals
+    function makeRevealObs(threshold, onEnter, onLeave) {
+      return new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) { onEnter(entry.target); }
+          else { if (onLeave) onLeave(entry.target); }
+        });
+      }, { threshold: threshold || 0.15 });
+    }
+
+    makeRevealObs(0.25,
+      function () { document.getElementById('rqInner').classList.add('show'); },
+      function () { document.getElementById('rqInner').classList.remove('show'); }
+    ).observe(document.getElementById('rqSection'));
+
+    makeRevealObs(0.2,
+      function () { document.getElementById('areasContent').classList.add('show'); },
+      function () { document.getElementById('areasContent').classList.remove('show'); }
+    ).observe(document.getElementById('areasHome'));
+  </script>
+
+</body>
+</html>
