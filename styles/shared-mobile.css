@@ -1,0 +1,62 @@
+a, button {
+  -webkit-tap-highlight-color: rgba(74, 170, 51, 0.28);
+  touch-action: manipulation;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .nav__links a:hover,
+  .panel__btn:hover,
+  .rq-btn:hover,
+  .quote-btn:hover,
+  .scroll-btn:hover,
+  .svc-quote-btn:hover,
+  .why__quote-btn:hover,
+  .svc__cta:hover,
+  .svc__link:hover,
+  .svc__list li:hover,
+  .wws__card:hover,
+  .wws__card:hover .wws__card-img,
+  .wws__card:hover .wws__card-body,
+  .loc__address a:hover,
+  .why__card:hover,
+  .svc-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .nav__toggle,
+  .nav__links a,
+  .panel__btn,
+  .rq-btn,
+  .quote-btn,
+  .scroll-btn,
+  .svc-quote-btn,
+  .why__quote-btn,
+  .svc__cta,
+  .svc__link {
+    transition-duration: 0.16s;
+  }
+
+  .nav__toggle:active,
+  .panel__btn:active,
+  .rq-btn:active,
+  .quote-btn:active,
+  .scroll-btn:active,
+  .svc-quote-btn:active,
+  .why__quote-btn:active,
+  .svc__cta:active {
+    transform: scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

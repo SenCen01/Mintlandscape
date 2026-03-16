@@ -8,6 +8,7 @@
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap"
     rel="stylesheet"
   />
+  <link rel="stylesheet" href="styles/shared-mobile.css" />
   <style>
     *, *::before, *::after {
       margin: 0;
@@ -78,6 +79,30 @@
       text-decoration: none;
     }
 
+    .nav__toggle {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255,255,255,0.45);
+      border-radius: 999px;
+      background: rgba(10,20,12,0.35);
+      color: #fff;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .nav__toggle svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
     .nav__links {
       display: flex;
       gap: 40px;
@@ -96,6 +121,65 @@
     }
 
     .nav__links a:hover { color: #fff; }
+
+    @media (max-width: 980px) {
+      .nav,
+      .nav.scrolled {
+        padding: 20px 24px;
+      }
+
+      .nav__links {
+        gap: 24px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav,
+      .nav.scrolled {
+        padding: 16px;
+      }
+
+      .nav__logo {
+        letter-spacing: 4px;
+      }
+
+      .nav__toggle {
+        display: inline-flex;
+      }
+
+      .nav__links {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 16px;
+        right: 16px;
+        flex-direction: column;
+        gap: 0;
+        padding: 8px 0;
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 14px;
+        background: rgba(10,20,12,0.96);
+        backdrop-filter: blur(6px);
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        pointer-events: none;
+        transform: translateY(-8px);
+        transition: max-height 0.28s ease, opacity 0.28s ease, transform 0.28s ease;
+      }
+
+      .nav__links a {
+        display: block;
+        padding: 12px 16px;
+        letter-spacing: 2px;
+      }
+
+      .nav__links.nav__links--open {
+        max-height: 320px;
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+    }
 
     /* ── PANELS — sit over the bottom half, fully transparent ── */
     .panels {
@@ -377,6 +461,92 @@
     }
     .areas-home__body p + p { margin-top: 14px; }
     .areas-home__note { font-size: 11.5px; color: rgba(85,85,85,0.55); }
+
+    @media (max-width: 980px) {
+      .panel {
+        padding: 0 28px 34px;
+      }
+
+      .panel__heading {
+        max-width: 100%;
+      }
+
+      .areas-home {
+        min-height: 0;
+      }
+
+      .areas-home__content {
+        padding: 60px 44px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-section {
+        min-height: 100svh;
+      }
+
+      .panels {
+        height: auto;
+        bottom: 14px;
+        flex-direction: column;
+        gap: 10px;
+        padding: 0 14px;
+      }
+
+      .panel {
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        padding: 16px;
+        background: rgba(0,0,0,0.32);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 12px;
+      }
+
+      .panel--left::after {
+        display: none;
+      }
+
+      .panel__heading {
+        margin-bottom: 14px;
+        line-height: 1.45;
+      }
+
+      .panel__btn {
+        padding: 11px 22px;
+      }
+
+      .rq-section {
+        min-height: 320px;
+      }
+
+      .rq-inner {
+        gap: 20px;
+      }
+
+      .areas-home {
+        flex-direction: column;
+      }
+
+      .areas-home__map,
+      .areas-home__map iframe {
+        min-height: 300px;
+      }
+
+      .areas-home__content {
+        padding: 36px 18px 40px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .panels.animate .panel--left,
+      .panels.animate .panel--right,
+      .panels.animate .panel__eyebrow,
+      .panels.animate .panel__heading,
+      .panels.animate .panel__btn {
+        transform: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -393,7 +563,21 @@
   <!-- Navigation -->
   <nav class="nav" id="siteNav" aria-label="Main navigation">
     <a href="home.html" class="nav__logo">Mint Landscape</a>
-    <ul class="nav__links">
+    <button
+      class="nav__toggle"
+      id="navToggle"
+      type="button"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      aria-controls="siteNavLinks"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <line x1="4" y1="7" x2="20" y2="7"></line>
+        <line x1="4" y1="12" x2="20" y2="12"></line>
+        <line x1="4" y1="17" x2="20" y2="17"></line>
+      </svg>
+    </button>
+    <ul class="nav__links" id="siteNavLinks">
       <li><a href="maintenance.html">Maintenance</a></li>
       <li><a href="construction.html">Construction</a></li>
       <li><a href="about.html">About Us</a></li>
@@ -454,6 +638,31 @@
   </section>
 
   <script>
+    var navToggle = document.getElementById('navToggle');
+    var navLinks = document.getElementById('siteNavLinks');
+
+    function setMobileNavState(isOpen) {
+      navLinks.classList.toggle('nav__links--open', isOpen);
+      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    }
+
+    navToggle.addEventListener('click', function () {
+      var isOpen = navLinks.classList.contains('nav__links--open');
+      setMobileNavState(!isOpen);
+    });
+
+    navLinks.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        setMobileNavState(false);
+      });
+    });
+
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 768) {
+        setMobileNavState(false);
+      }
+    });
+
     // Lock scroll until intro animation completes
     document.body.classList.add('no-scroll');
 
