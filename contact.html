@@ -326,31 +326,141 @@
       line-height: 1.85;
     }
 
-    /* Form wrapper — transparent, no card */
+    /* Form wrapper */
     .quote-form-wrap {
       width: 100%;
-      position: relative;
     }
 
-    .quote-form-wrap iframe {
-      display: block;
+    /* ─────────────────────────────
+       QUOTE FORM
+    ───────────────────────────── */
+    .quote-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
       width: 100%;
-      min-height: 580px;
-      border: none;
-      background: transparent;
     }
 
-    /* Cover the OpenForms branding badge in the bottom-right of the iframe */
-    .quote-form-wrap::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 160px;
-      height: 40px;
+    .quote-form__row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .quote-form__field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quote-form__label {
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .quote-form__input,
+    .quote-form__select,
+    .quote-form__textarea {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: #ffffff;
+      outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .quote-form__input::placeholder,
+    .quote-form__textarea::placeholder {
+      color: rgba(255,255,255,0.22);
+    }
+
+    .quote-form__input:focus,
+    .quote-form__select:focus,
+    .quote-form__textarea:focus {
+      border-color: #4aaa33;
+      background: rgba(74,170,51,0.06);
+    }
+
+    .quote-form__select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+    }
+
+    .quote-form__select option {
       background: #0f1f12;
-      pointer-events: none;
-      z-index: 2;
+      color: #ffffff;
+    }
+
+    .quote-form__textarea {
+      resize: vertical;
+      min-height: 130px;
+      line-height: 1.65;
+    }
+
+    .quote-form__submit {
+      align-self: flex-start;
+      margin-top: 8px;
+      padding: 15px 40px;
+      background: #4aaa33;
+      border: none;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #ffffff;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    .quote-form__submit:hover {
+      background: #3d9029;
+    }
+
+    .quote-form__submit:active {
+      transform: scale(0.97);
+    }
+
+    .quote-form__submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .quote-form__status {
+      font-size: 13px;
+      font-weight: 400;
+      padding: 12px 16px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .quote-form__status--success {
+      display: block;
+      background: rgba(74,170,51,0.12);
+      border: 1px solid rgba(74,170,51,0.35);
+      color: #7ecb66;
+    }
+
+    .quote-form__status--error {
+      display: block;
+      background: rgba(220,60,60,0.1);
+      border: 1px solid rgba(220,60,60,0.3);
+      color: #e07070;
     }
 
     @media (max-width: 980px) {
@@ -420,12 +530,14 @@
         padding: 28px 18px 40px;
       }
 
-      .quote-form-wrap iframe {
-        min-height: 520px;
+      .quote-form__row {
+        grid-template-columns: 1fr;
       }
 
-      .quote-form-wrap::after {
-        width: 120px;
+      .quote-form__submit {
+        width: 100%;
+        text-align: center;
+        align-self: stretch;
       }
     }
 
@@ -470,8 +582,8 @@
         <h3 class="contact-col__head" id="locHead">Locations</h3>
         <div class="contact-col__rule" id="locRule"></div>
         <div class="contact-loc" id="contactLoc">
-          <p class="contact-loc__name">Vancouver</p>
-          <p class="contact-loc__addr">170 – 422 Richards St<br>Vancouver, BC V6B 2Z4</p>
+          <p class="contact-loc__name">Langley</p>
+          <p class="contact-loc__addr">9780 197B St, Unit #201<br>Langley Township, BC V1M 3G3<br>Canada</p>
         </div>
       </div>
 
@@ -482,20 +594,8 @@
         <div class="enquiries-grid" id="enqGrid">
 
           <div class="enq-item">
-            <p class="enq-item__head">Maintenance &amp; General</p>
-            <p class="enq-item__detail">TBA</p>
-            <p class="enq-item__detail">TBA</p>
-          </div>
-
-          <div class="enq-item">
-            <p class="enq-item__head">Construction Projects</p>
-            <p class="enq-item__detail">TBA</p>
-            <p class="enq-item__detail">TBA</p>
-          </div>
-
-          <div class="enq-item">
-            <p class="enq-item__head">General Accounting</p>
-            <p class="enq-item__detail">TBA</p>
+            <p class="enq-item__head">Phone</p>
+            <p class="enq-item__detail"><a href="tel:+16723362753" style="color:inherit;text-decoration:none;">672-336-2753</a></p>
           </div>
 
         </div>
@@ -507,7 +607,7 @@
   <!-- ── MAP ── -->
   <div class="map-section" id="mapSection">
     <iframe
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2602.5!2d-123.1195!3d49.2813!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5486717f41ba2fb9%3A0x36dfc0a2b5d9e24!2s422%20Richards%20St%20%23170%2C%20Vancouver%2C%20BC%20V6B%202Z4!5e0!3m2!1sen!2sca!4v1710000000000!5m2!1sen!2sca"
+      src="https://maps.google.com/maps?q=9780+197B+St+%23201,+Langley,+BC+V1M+3G3,+Canada&output=embed&z=15"
       allowfullscreen=""
       loading="lazy"
       referrerpolicy="no-referrer-when-downgrade"
@@ -531,11 +631,84 @@
         </p>
       </div>
 
-      <!-- Right: embedded form -->
+      <!-- Right: contact form -->
       <div class="quote-right">
         <div class="quote-form-wrap">
-          <iframe style="border:none;width:100%;background:transparent;" id="contact-form-yg5nct" src="https://forms.mintclean.ca/forms/contact-form-yg5nct?hide_branding=true&transparent=true"></iframe>
-          <script type="text/javascript" onload="initEmbed('contact-form-yg5nct', { autoResize: true })" src="https://forms.mintclean.ca/widgets/iframe.min.js"></script>
+          <form class="quote-form" id="quoteForm" novalidate>
+
+            <div class="quote-form__row">
+              <div class="quote-form__field">
+                <label class="quote-form__label" for="qf-name">Full Name</label>
+                <input
+                  class="quote-form__input"
+                  type="text"
+                  id="qf-name"
+                  name="full_name"
+                  placeholder="Jane Smith"
+                  required
+                  autocomplete="name"
+                />
+              </div>
+              <div class="quote-form__field">
+                <label class="quote-form__label" for="qf-email">Email Address</label>
+                <input
+                  class="quote-form__input"
+                  type="email"
+                  id="qf-email"
+                  name="email"
+                  placeholder="jane@example.com"
+                  required
+                  autocomplete="email"
+                />
+              </div>
+            </div>
+
+            <div class="quote-form__row">
+              <div class="quote-form__field">
+                <label class="quote-form__label" for="qf-phone">Phone Number</label>
+                <input
+                  class="quote-form__input"
+                  type="tel"
+                  id="qf-phone"
+                  name="phone"
+                  placeholder="+1 (604) 555-0100"
+                  required
+                  autocomplete="tel"
+                />
+              </div>
+              <div class="quote-form__field">
+                <label class="quote-form__label" for="qf-property">Property Type</label>
+                <select
+                  class="quote-form__select"
+                  id="qf-property"
+                  name="property_type"
+                  required
+                >
+                  <option value="" disabled selected>Select type…</option>
+                  <option value="Residential">Residential</option>
+                  <option value="Commercial">Commercial</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="quote-form__field">
+              <label class="quote-form__label" for="qf-description">Project Description</label>
+              <textarea
+                class="quote-form__textarea"
+                id="qf-description"
+                name="description"
+                placeholder="Tell us about your project — scope, timeline, any specific requirements…"
+                required
+              ></textarea>
+            </div>
+
+            <div class="quote-form__status" id="qfStatus"></div>
+
+            <button class="quote-form__submit" type="submit" id="qfSubmit">
+              Send Request
+            </button>
+
+          </form>
         </div>
       </div>
 
@@ -619,6 +792,63 @@
       function () { document.getElementById('quoteInner').classList.add('show'); },
       function () { document.getElementById('quoteInner').classList.remove('show'); }
     ).observe(document.getElementById('quote'));
+
+    /* ─────────────────────────────────────────────
+       QUOTE FORM SUBMISSION
+    ───────────────────────────────────────────── */
+    var WEBHOOK_URL = 'https://automation.resolverestoration.ca/webhook/landscape-form';
+
+    document.getElementById('quoteForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      var form = e.target;
+      var submitBtn = document.getElementById('qfSubmit');
+      var statusEl = document.getElementById('qfStatus');
+
+      // Basic client-side validation
+      var fullName = form.full_name.value.trim();
+      var email = form.email.value.trim();
+      var phone = form.phone.value.trim();
+      var propertyType = form.property_type.value;
+      var description = form.description.value.trim();
+
+      if (!fullName || !email || !phone || !propertyType || !description) {
+        statusEl.className = 'quote-form__status quote-form__status--error';
+        statusEl.textContent = 'Please fill in all required fields.';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+      statusEl.className = 'quote-form__status';
+      statusEl.textContent = '';
+
+      fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          full_name: fullName,
+          email: email,
+          phone: phone,
+          property_type: propertyType,
+          description: description
+        })
+      })
+      .then(function (res) {
+        if (!res.ok) { throw new Error('Server error ' + res.status); }
+        form.reset();
+        statusEl.className = 'quote-form__status quote-form__status--success';
+        statusEl.textContent = 'Thank you! We\'ll be in touch shortly.';
+        submitBtn.textContent = 'Send Request';
+        submitBtn.disabled = false;
+      })
+      .catch(function () {
+        statusEl.className = 'quote-form__status quote-form__status--error';
+        statusEl.textContent = 'Something went wrong. Please try again or email us directly.';
+        submitBtn.textContent = 'Send Request';
+        submitBtn.disabled = false;
+      });
+    });
   </script>
 
 </body>
